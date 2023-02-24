@@ -1,0 +1,90 @@
+<mvc:View controllerName="zproddoc.controller.Worklist" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table">
+    <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
+        <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
+        <m:Input id="inpSalesOrder" type="Number" change="onReadPos" value="30049734" />
+        <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
+        <m:Input id="inpSalesOrderPos" type="Number" change="onReadPos" value="10" />
+    </m:HBox>
+
+    <f:SimpleForm id="SimpleFormDisplay354"
+			editable="false"
+			layout="ResponsiveGridLayout">
+				<m:Label text="{i18n>lblCustomer}" />
+				<m:Text id="nameText" text="12345 Kaufgigant Ltd" />
+				<m:Label text="{i18n>lblPurchaseOrderNum}" />
+				<m:Text  text="4530051417" />
+				<m:Label text="{i18n>lblDate}" />
+				<m:Text text="12.02.2023" />
+   	</f:SimpleForm>         
+
+    <TreeTable id="treeInspPlan" selectionMode="Multi" enableColumnReordering="false" visibleRowCount="15" visibleRowCountMode="Fixed" rows="{path:'/catalog/clothing', parameters: {arrayNames:['categories']}}">
+        <extension>
+    <m:HBox id="hboxApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop" justifyContent="End">
+        <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
+            <m:Title id="title" text="" />
+            <m:ToolbarSpacer id="tbsApplToolbar" />
+            <m:Button id="btnLineInsert" text="{i18n>btnLineInsert}" icon="sap-icon://sys-add" press="onLineInsert" />
+            <m:Button id="btnLineDelete" text="{i18n>btnLineDelete}" icon="sap-icon://delete" press="onLineInsert" />
+            <m:Button id="btnCopy" text="{i18n>btnCopy}" icon="sap-icon://copy" press="onLineInsert" />
+            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onLineInsert" />
+        </m:OverflowToolbar>
+    </m:HBox>
+        </extension>
+        <columns>
+            <Column id="cln1" label="{i18n>colNum}" width="16rem">
+                <template>
+                    <m:Text id="txt1" text="{id}" wrapping="false" />
+                </template>
+            </Column>
+            <Column id="cln2" label="{i18n>colActivity}" width="9rem">
+                <template>
+                    <m:Text id="txt2" text="{activity}" wrapping="false" />
+                </template>
+            </Column>
+            <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
+                <template>
+                    <m:Text id="txt3" text="{procedure}" wrapping="false" />
+                </template>
+            </Column>
+            <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
+                <template>
+                    <m:Text id="txt4" text="{acceptCriteria}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln5" label="{i18n>colRecord}" width="6rem">
+                <template>
+                    <m:Text id="txt5" text="{record}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln6" label="{i18n>colFrequency}" width="6rem">
+                <template>
+                    <m:Text id="txt6" text="{frequency}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln7" label="{i18n>colCode}" width="6rem">
+                <template>
+                    <m:Text id="txt7" text="{code}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln8" label="{i18n>colSignature}" width="6rem">
+                <template>
+                    <m:Text id="txt8" text="{signature}" wrapping="false" />
+                </template>
+            </Column>                        
+<!--            <Column id="cln2" width="9rem">
+                <m:Label text="Price" />
+                <template>
+                    <u:Currency value="{amount}" currency="{currency}" />
+                </template>
+            </Column>
+            <Column id="cln3" width="11rem">
+                <m:Label text="Size" />
+                <template>
+                    <m:Select items="{path: '/sizes', templateShareable: true}" selectedKey="{size}" visible="{= !!${size}}" forceSelection="false">
+                        <core:Item key="{key}" text="{value}" />
+                    </m:Select>
+                </template>
+            </Column>  -->
+        </columns>    
+    </TreeTable>
+</mvc:View>
