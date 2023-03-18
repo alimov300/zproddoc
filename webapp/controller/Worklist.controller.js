@@ -1,113 +1,67 @@
-sap.ui.define([
-    "sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel"
-],
-    /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
-     */
-    function (Controller, JSONModel) {
-        "use strict";
+sap.ui.define(
+  ["sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel"],
+  /**
+   * @param {typeof sap.ui.core.mvc.Controller} Controller
+   */
+  (Controller, JSONModel) =>
+    Controller.extend("zproddoc.controller.Worklist", {
+      onInit() {
+        const oCtrl = this;
+        const oDataModel = new JSONModel({});
+        oCtrl.getView().setModel(oDataModel, "data");
+      },
 
-        return Controller.extend("zproddoc.controller.Worklist",  {
-            onInit: function () {
-              var oModel = new JSONModel();
-              var str = `{
-                "catalog": {
-                    "clothing": {
-                        "categories": [{
-                            "id": "1 Fabrication Supervision",
-                            "categories": [{
-                                "id": "1.1 Raw Material",
-                                "categories": [{
-                                        "id": "1.1.1 General",
-                                        "activity": "PMI - Positive Material Identification",
-                                        "procedure": "EKATO Quality Assurance 20182858",
-                                        "acceptCriteria": "acc. DIN EN 10204 and EKATO quality system",
-                                        "record": "Test record",
-                                        "frequency": "1 per lot",
-                                        "code": "SW/W/H/R",
-                                        "signature": ""
-                                    },
-                                    {
-                                        "id": "1.1.2 General",
-                                        "activity": "PMI - Positive Material Identification",
-                                        "procedure": "EKATO Quality Assurance 20182858",
-                                        "acceptCriteria": "acc. EKATO quality system",
-                                        "record": "Test record",
-                                        "frequency": "100%",
-                                        "code": "",
-                                        "signature": ""
-                                    },
-                                    {
-                                        "id": "1.1.3 Agitator Shaft",
-                                        "activity": "UT - Ultrasonic Testing",
-                                        "procedure": "",
-                                        "acceptCriteria": "",
-                                        "record": "",
-                                        "frequency": "100%",
-                                        "code": "H/R",
-                                        "signature": ""
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "1.2 Fabrication Machining",
-                                "categories": [{
-                                        "id": "1.2.1 General",
-                                        "activity": "PMI - Positive Material Identification",
-                                        "procedure": "EKATO Quality Assurance 10068393",
-                                        "acceptCriteria": "acc. DIN EN 10204 and EKATO quality system",
-                                        "record": "Test record",
-                                        "frequency": "1 per lot",
-                                        "code": "SW/W/H/R",
-                                        "signature": ""
-                                    },
-                                    {
-                                        "id": "1.2.2 General",
-                                        "activity": "VT",
-                                        "procedure": "KB - 57001225",
-                                        "acceptCriteria": "acc. EKATO quality system",
-                                        "record": "spezielle Kundenanforderungen sind vor ab mit der Prüfaufsicht abzustimmen und hier zu beschreiben",
-                                        "frequency": "100%",
-                                        "code": "",
-                                        "signature": ""
-                                    },
-                                    {
-                                        "id": "1.2.5 Impeller",
-                                        "activity": "VI",
-                                        "procedure": "",
-                                        "acceptCriteria": "",
-                                        "record": "",
-                                        "frequency": "100%",
-                                        "code": "H/R",
-                                        "signature": ""
-                                    }
-                                ]
-                            }]
-                        },
-                        { "id": "2 Material Certficates", "categories": [] }
-                        ],
-                        "sizes": [{
-                                "key": "XS",
-                                "value": "Extra Small"
-                            },
-                            {
-                                "key": "S",
-                                "value": "Small"
-                            },
-                            {
-                                "key": "M",
-                                "value": "Medium"
-                            },
-                            {
-                                "key": "L",
-                                "value": "Large"
-                            }
-                        ]
-                    }
-                }
-            }`;
-              oModel.setData(JSON.parse(str));
-              this.getView().setModel(oModel);
-            }
+      onDownload() {
+        const oCtrl = this;
+        const temp = "ITP_30000634_10.pdf";
+        const oServiceModel = oCtrl.getView().getModel();
+        oServiceModel.read(`/ITPFormSet('${temp}')/$value`, {
+          method: "GET",
+          success(data) {
+            debugger;
+            const fName = data.Filename;
+            const fType = data.Filetype;
+            const fContent = data.Filecontent;
+
+            File.save(fContent, fName, "pdf", fType);
+          },
         });
-    });
+      },
+
+      onLoadITP() {
+        const oCtrl = this;
+        const oServiceModel = oCtrl.getView().getModel();
+        oServiceModel.read("/ITPStrucSet", {
+          urlParameters: { $top: "9999" },
+          success(data) {
+            const { results } = data;
+            const itpTree = oCtrl._unflatten(results);
+            const oDataModel = oCtrl.getView().getModel("data");
+
+            oDataModel.setProperty("/itp", itpTree);
+          },
+        });
+      },
+
+      _unflatten(array, parent) {
+        let tree = [];
+        parent = typeof parent !== "undefined" ? parent : { NodeKey: "" };
+
+        const children = array.filter(
+          (child) => child.ParentNodeKey === parent.NodeKey
+        );
+
+        if (children.length > 0) {
+          if (parent.NodeKey === "") {
+            tree = children;
+          } else {
+            parent.children = children;
+          }
+          children.forEach((child) => {
+            this._unflatten(array, child);
+          });
+        }
+        return tree;
+      },
+    })
+);

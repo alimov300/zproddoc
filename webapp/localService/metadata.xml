@@ -1,349 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
     <edmx:DataServices m:DataServiceVersion="2.0">
-        <Schema Namespace="ZPRELIMDOC_SRV" xml:lang="de" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-            <EntityType Name="SDDocCont" sap:content-version="1">
+        <Schema Namespace="ZPRODDOC_SRV" xml:lang="de" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="ITPStruc" sap:content-version="1">
                 <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
+                    <PropertyRef Name="Vbeln" />
+                    <PropertyRef Name="ParentNodeKey" />
+                    <PropertyRef Name="Posnr" />
+                    <PropertyRef Name="Counter" />
                 </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Dokar" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Dokumentart" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcSelected" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Selektiert" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcOption" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Auswahl" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="PlansCre" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Ersteller" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="PlansIfs" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Int.Freigabest." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="PlansEfs" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Ext.Freigabest." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="PrelimDate" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Datum Vorabdoku" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="FinalDate" Type="Edm.DateTime" Precision="0" sap:unicode="false" sap:label="Fin. Dok. Datum" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Penal" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Penalen Vorabdoku" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="SddcStatus" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Versand-Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="CustomerDocno" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Customer DocNo." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Keyword1" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Schlüsselwort" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Keyword2" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Schlüsselwort" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcComment" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Bemerkung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <NavigationProperty Name="SDDocCont_MdcntSet" Relationship="ZPRELIMDOC_SRV.DMdcnt" FromRole="FromRole_DMdcnt" ToRole="ToRole_DMdcnt"/>
-                <NavigationProperty Name="SDDocCont_MatklSet" Relationship="ZPRELIMDOC_SRV.DMatkl" FromRole="FromRole_DMatkl" ToRole="ToRole_DMatkl"/>
-                <NavigationProperty Name="SDDocCont_TargtSet" Relationship="ZPRELIMDOC_SRV.DTargt" FromRole="FromRole_DTargt" ToRole="ToRole_DTargt"/>
-                <NavigationProperty Name="SDDocCont_MetaSet" Relationship="ZPRELIMDOC_SRV.DMeta" FromRole="FromRole_DMeta" ToRole="ToRole_DMeta"/>
-                <NavigationProperty Name="SDocCont_TemplSet" Relationship="ZPRELIMDOC_SRV.DTempl" FromRole="FromRole_DTempl" ToRole="ToRole_DTempl"/>
+                <Property Name="AcceptCritDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="NodeKey" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Knoten-ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="FrequencyDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Vertriebsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="ParentNodeKey" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Parent-Knoten" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Counter" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Zaehler" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="InspItemDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="ActivityDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="InspectionItem" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Bauteil" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Activity" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Aktivität" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="DocContentDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="DocumentContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="EKATO-DokumentNum." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeInternalDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Frequency" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Frequency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeCustomerDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeInternal" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Teilnahmecode" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeThirdPartyDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeCustomer" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Teilnahmecode" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeSubVendorDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="LocationDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeThirdParty" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Teilnahmecode" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="PCodeSubVendor" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Teilnahmecode" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="Location" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Location" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+                <Property Name="AcceptanceCriteria" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Abnahme Krit." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
             </EntityType>
-            <EntityType Name="SDDocCont_Matkl" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                    <PropertyRef Name="Matkl"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Matkl" Type="Edm.String" Nullable="false" MaxLength="9" sap:unicode="false" sap:label="Warengruppe" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Mdcnt" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                    <PropertyRef Name="DocKind"/>
-                    <PropertyRef Name="Langu"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocKind" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Kategorie Dok." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Langu" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sprache" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="MdCount" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Anzahl" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Medium" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Medium" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="DocList" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="DcProfile"/>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                </Key>
-                <Property Name="DcProfile" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Profil" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcDescr" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcSelected" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcOption" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Auswahl" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Selectable" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Selektierbar" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Keyword1" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Keyword2" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="ProfileList" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="DcProfile"/>
-                    <PropertyRef Name="Posnr"/>
-                </Key>
-                <Property Name="DcProfile" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Meta" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Active" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="TRUE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Mdcntavail" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="TRUE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Languavail" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="TRUE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Targt" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Mandt"/>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                </Key>
-                <Property Name="Mandt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Mandant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Target" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Ziel-Knoten" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="DcMode" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Active"/>
-                </Key>
-                <Property Name="Active" Type="Edm.Boolean" Nullable="false" sap:unicode="false" sap:label="Flag" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Profile" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Lang" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                    <PropertyRef Name="Langu"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Langu" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sprache" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Fltr" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Keyword" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Schlüsselwort" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="KwGroup" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="SchlüsselwortGr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="SDDocCont_Templ" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                    <PropertyRef Name="Title"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Title" Type="Edm.String" Nullable="false" MaxLength="32" sap:unicode="false" sap:label="Texto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcProfile" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Profilname" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Laiso" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Sprache (ISO)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Template" Type="Edm.String" Nullable="false" MaxLength="33" sap:unicode="false" sap:label="Dok.infosatz" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="DocIds" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="DocContent"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DcDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <EntityType Name="RefTempl" sap:content-version="1">
-                <Key>
-                    <PropertyRef Name="Vbeln"/>
-                    <PropertyRef Name="Posnr"/>
-                    <PropertyRef Name="VbelnTempl"/>
-                    <PropertyRef Name="PosnrTempl"/>
-                </Key>
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="VbelnTempl" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="PosnrTempl" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </EntityType>
-            <ComplexType Name="SDDC_MATKL">
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Matkl" Type="Edm.String" Nullable="false" MaxLength="9" sap:label="Warengruppe" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </ComplexType>
-            <ComplexType Name="SDDC_MDCNT">
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocContent" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="DocKind" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Kategorie Dok." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Langu" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Sprache" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="MdCount" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Anzahl" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Medium" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Medium" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </ComplexType>
-            <ComplexType Name="SDDC_TARGT">
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Doccontent" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Target" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Ziel-Knoten" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </ComplexType>
-            <ComplexType Name="SDDC_LANG">
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Doccontent" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Langu" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Sprache" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </ComplexType>
-            <ComplexType Name="SDDC_TEMPL">
-                <Property Name="Vbeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Verkaufsbeleg" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Posnr" Type="Edm.String" Nullable="false" MaxLength="6" sap:label="Position" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Doccontent" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Dokument Inhalt" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Template" Type="Edm.String" Nullable="false" MaxLength="33" sap:label="Dok.infosatz" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-                <Property Name="Title" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Texto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
-            </ComplexType>
-            <Association Name="DMdcnt" sap:content-version="1">
-                <End Type="ZPRELIMDOC_SRV.SDDocCont" Multiplicity="1" Role="FromRole_DMdcnt"/>
-                <End Type="ZPRELIMDOC_SRV.SDDocCont_Mdcnt" Multiplicity="*" Role="ToRole_DMdcnt"/>
-                <ReferentialConstraint>
-                    <Principal Role="FromRole_DMdcnt">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Principal>
-                    <Dependent Role="ToRole_DMdcnt">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Dependent>
-                </ReferentialConstraint>
-            </Association>
-            <Association Name="DMeta" sap:content-version="1">
-                <End Type="ZPRELIMDOC_SRV.SDDocCont" Multiplicity="1" Role="FromRole_DMeta"/>
-                <End Type="ZPRELIMDOC_SRV.SDDocCont_Meta" Multiplicity="1" Role="ToRole_DMeta"/>
-                <ReferentialConstraint>
-                    <Principal Role="FromRole_DMeta">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Principal>
-                    <Dependent Role="ToRole_DMeta">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Dependent>
-                </ReferentialConstraint>
-            </Association>
-            <Association Name="DTargt" sap:content-version="1">
-                <End Type="ZPRELIMDOC_SRV.SDDocCont" Multiplicity="1" Role="FromRole_DTargt"/>
-                <End Type="ZPRELIMDOC_SRV.SDDocCont_Targt" Multiplicity="*" Role="ToRole_DTargt"/>
-                <ReferentialConstraint>
-                    <Principal Role="FromRole_DTargt">
-                        <PropertyRef Name="Vbeln"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="DocContent"/>
-                    </Principal>
-                    <Dependent Role="ToRole_DTargt">
-                        <PropertyRef Name="Vbeln"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="DocContent"/>
-                    </Dependent>
-                </ReferentialConstraint>
-            </Association>
-            <Association Name="DTempl" sap:content-version="1">
-                <End Type="ZPRELIMDOC_SRV.SDDocCont" Multiplicity="1" Role="FromRole_DTempl"/>
-                <End Type="ZPRELIMDOC_SRV.SDDocCont_Templ" Multiplicity="*" Role="ToRole_DTempl"/>
-            </Association>
-            <Association Name="DMatkl" sap:content-version="1">
-                <End Type="ZPRELIMDOC_SRV.SDDocCont" Multiplicity="1" Role="FromRole_DMatkl"/>
-                <End Type="ZPRELIMDOC_SRV.SDDocCont_Matkl" Multiplicity="*" Role="ToRole_DMatkl"/>
-                <ReferentialConstraint>
-                    <Principal Role="FromRole_DMatkl">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Principal>
-                    <Dependent Role="ToRole_DMatkl">
-                        <PropertyRef Name="DocContent"/>
-                        <PropertyRef Name="Posnr"/>
-                        <PropertyRef Name="Vbeln"/>
-                    </Dependent>
-                </ReferentialConstraint>
-            </Association>
-            <EntityContainer Name="ZPRELIMDOC_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
-                <EntitySet Name="SDDocContSet" EntityType="ZPRELIMDOC_SRV.SDDocCont" sap:addressable="false" sap:requires-filter="true" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_MatklSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Matkl" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_MdcntSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Mdcnt" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="DocListSet" EntityType="ZPRELIMDOC_SRV.DocList" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:requires-filter="true" sap:content-version="1"/>
-                <EntitySet Name="ProfileListSet" EntityType="ZPRELIMDOC_SRV.ProfileList" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:requires-filter="true" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_MetaSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Meta" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_TargtSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Targt" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="DcModeCollection" EntityType="ZPRELIMDOC_SRV.DcMode" sap:content-version="1"/>
-                <EntitySet Name="SDDocLangSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Lang" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_FltrSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Fltr" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="SDDocCont_TemplSet" EntityType="ZPRELIMDOC_SRV.SDDocCont_Templ" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <EntitySet Name="DocIdsSet" EntityType="ZPRELIMDOC_SRV.DocIds" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
-                <EntitySet Name="RefTemplSet" EntityType="ZPRELIMDOC_SRV.RefTempl" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
-                <AssociationSet Name="DMdcnt_AssocSet" Association="ZPRELIMDOC_SRV.DMdcnt" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="SDDocContSet" Role="FromRole_DMdcnt"/>
-                    <End EntitySet="SDDocCont_MdcntSet" Role="ToRole_DMdcnt"/>
-                </AssociationSet>
-                <AssociationSet Name="DTargt_AssocSet" Association="ZPRELIMDOC_SRV.DTargt" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="SDDocContSet" Role="FromRole_DTargt"/>
-                    <End EntitySet="SDDocCont_TargtSet" Role="ToRole_DTargt"/>
-                </AssociationSet>
-                <AssociationSet Name="DMatkl_AssocSet" Association="ZPRELIMDOC_SRV.DMatkl" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="SDDocContSet" Role="FromRole_DMatkl"/>
-                    <End EntitySet="SDDocCont_MatklSet" Role="ToRole_DMatkl"/>
-                </AssociationSet>
-                <AssociationSet Name="DMeta_AssocSet" Association="ZPRELIMDOC_SRV.DMeta" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="SDDocContSet" Role="FromRole_DMeta"/>
-                    <End EntitySet="SDDocCont_MetaSet" Role="ToRole_DMeta"/>
-                </AssociationSet>
-                <AssociationSet Name="DTempl_AssocSet" Association="ZPRELIMDOC_SRV.DTempl" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
-                    <End EntitySet="SDDocContSet" Role="FromRole_DTempl"/>
-                    <End EntitySet="SDDocCont_TemplSet" Role="ToRole_DTempl"/>
-                </AssociationSet>
-                <FunctionImport Name="GetDocList" ReturnType="Collection(ZPRELIMDOC_SRV.DocList)" EntitySet="DocListSet" m:HttpMethod="GET">
-                    <Parameter Name="Vbeln" Type="Edm.String" Mode="In" MaxLength="10"/>
-                    <Parameter Name="Posnr" Type="Edm.String" Mode="In" MaxLength="6"/>
-                    <Parameter Name="DcProfile" Type="Edm.String" Mode="In" MaxLength="30"/>
-                </FunctionImport>
-                <FunctionImport Name="GetMode" ReturnType="ZPRELIMDOC_SRV.DcMode" EntitySet="DcModeCollection" m:HttpMethod="GET">
-                    <Parameter Name="Vbeln" Type="Edm.String" Mode="In" MaxLength="10"/>
-                    <Parameter Name="Posnr" Type="Edm.String" Mode="In" MaxLength="6"/>
-                </FunctionImport>
-                <FunctionImport Name="GetAntosDocList" ReturnType="Collection(ZPRELIMDOC_SRV.DocList)" EntitySet="DocListSet" m:HttpMethod="GET">
-                    <Parameter Name="DcProfile" Type="Edm.String" Mode="In" MaxLength="30"/>
-                    <Parameter Name="Posnr" Type="Edm.String" Mode="In" MaxLength="6"/>
-                    <Parameter Name="Vbeln" Type="Edm.String" Mode="In" MaxLength="10"/>
-                </FunctionImport>
-                <FunctionImport Name="GetDocIds" ReturnType="Collection(ZPRELIMDOC_SRV.DocIds)" EntitySet="DocIdsSet" m:HttpMethod="GET">
-                    <Parameter Name="Vbeln" Type="Edm.String" Mode="In" MaxLength="10"/>
-                    <Parameter Name="Posnr" Type="Edm.String" Mode="In" MaxLength="6"/>
-                    <Parameter Name="DcProfile" Type="Edm.String" Mode="In" MaxLength="30"/>
-                </FunctionImport>
-                <FunctionImport Name="SetRefTemplate" ReturnType="ZPRELIMDOC_SRV.DcMode" EntitySet="DcModeCollection" m:HttpMethod="GET">
-                    <Parameter Name="Vbeln" Type="Edm.String" Mode="In" MaxLength="10"/>
-                    <Parameter Name="Posnr" Type="Edm.String" Mode="In" MaxLength="6"/>
-                    <Parameter Name="Vbeln_templ" Type="Edm.String" Mode="In" MaxLength="10"/>
-                    <Parameter Name="Posnr_templ" Type="Edm.String" Mode="In" MaxLength="6"/>
-                </FunctionImport>
+            <EntityContainer Name="ZPRODDOC_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ITPStrucSet" EntityType="ZPRODDOC_SRV.ITPStruc" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1" />
             </EntityContainer>
-            <atom:link rel="self" href="http://10.99.99.30:8000/sap/opu/odata/sap/ZPRELIMDOC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
-            <atom:link rel="latest-version" href="http://10.99.99.30:8000/sap/opu/odata/sap/ZPRELIMDOC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="self" href="http://sapekd.ekato.de:8000/sap/opu/odata/sap/ZPRODDOC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom" />
+            <atom:link rel="latest-version" href="http://sapekd.ekato.de:8000/sap/opu/odata/sap/ZPRODDOC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom" />
         </Schema>
     </edmx:DataServices>
 </edmx:Edmx>

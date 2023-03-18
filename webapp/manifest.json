@@ -17,7 +17,7 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "/sap/opu/odata/sap/ZPRELIMDOC_SRV/",
+        "uri": "/sap/opu/odata/sap/ZPRODDOC_SRV/",
         "type": "OData",
         "settings": {
           "annotations": [],

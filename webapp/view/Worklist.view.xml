@@ -1,12 +1,12 @@
 <mvc:View controllerName="zproddoc.controller.Worklist" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table">
     <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
-        <m:Input id="inpSalesOrder" type="Number" change="onReadPos" value="30049734" />
+        <m:Input id="inpSalesOrder" type="Number" change="onReadPos" value="30000634" />
         <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
         <m:Input id="inpSalesOrderPos" type="Number" change="onReadPos" value="10" />
     </m:HBox>
 
-    <f:SimpleForm id="SimpleFormDisplay354"
+  <!--  <f:SimpleForm id="SimpleFormDisplay354"
 			editable="false"
 			layout="ResponsiveGridLayout">
 				<m:Label text="{i18n>lblCustomer}" />
@@ -15,60 +15,98 @@
 				<m:Text  text="4530051417" />
 				<m:Label text="{i18n>lblDate}" />
 				<m:Text text="12.02.2023" />
-   	</f:SimpleForm>         
+   	</f:SimpleForm>      -->    
 
-    <TreeTable id="treeInspPlan" selectionMode="Multi" enableColumnReordering="false" visibleRowCount="15" visibleRowCountMode="Fixed" rows="{path:'/catalog/clothing', parameters: {arrayNames:['categories']}}">
+    <TreeTable id="treeInspPlan" selectionMode="Multi"
+               enableColumnReordering="false"
+               visibleRowCount="15"
+               visibleRowCountMode="Fixed"
+               rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
         <extension>
-    <m:HBox id="hboxApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop" justifyContent="End">
-        <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
+          <m:HBox id="hboxApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop" justifyContent="End">
+           <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
-            <m:ToolbarSpacer id="tbsApplToolbar" />
-            <m:Button id="btnLineInsert" text="{i18n>btnLineInsert}" icon="sap-icon://sys-add" press="onLineInsert" />
-            <m:Button id="btnLineDelete" text="{i18n>btnLineDelete}" icon="sap-icon://delete" press="onLineInsert" />
-            <m:Button id="btnCopy" text="{i18n>btnCopy}" icon="sap-icon://copy" press="onLineInsert" />
-            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onLineInsert" />
-        </m:OverflowToolbar>
-    </m:HBox>
+
+            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false">
+				<m:layoutData>
+					<m:FlexItemData id="fidSelectedOnly" growFactor="1" />
+				</m:layoutData>
+			</m:Switch>
+            <m:Label id="lblSelectedOnly" text="{i18n>lblSelectedOnly}" labelFor="switchSelectedOnly" />
+
+            <m:Switch id="switchExtendedDelivery" type="AcceptReject" state="false">
+				<m:layoutData>
+					<m:FlexItemData id="fidExtendedDelivery" growFactor="1"/>
+				</m:layoutData>
+			</m:Switch>
+            <m:Label id="lblExtendedDelivery" text="{i18n>lblExtendedDelivery}" labelFor="switchExtendedDelivery" />
+
+            <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
+
+            <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />
+            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />
+            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSave" />
+            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onRelease" />
+            <m:Button id="btnDownload" text="{i18n>btnDownload}" icon="sap-icon://download" press="onDownload" />
+            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" /> 
+
+           </m:OverflowToolbar>
+          </m:HBox>
         </extension>
         <columns>
             <Column id="cln1" label="{i18n>colNum}" width="16rem">
                 <template>
-                    <m:Text id="txt1" text="{id}" wrapping="false" />
+                    <m:Text id="txt1" text="{data>InspItemDescr}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template>
-                    <m:Text id="txt2" text="{activity}" wrapping="false" />
+                    <m:Text id="txt2" text="{data>ActivityDescr}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
                 <template>
-                    <m:Text id="txt3" text="{procedure}" wrapping="false" />
+                    <m:Text id="txt3" text="" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
                 <template>
-                    <m:Text id="txt4" text="{acceptCriteria}" wrapping="false" />
+                    <m:Text id="txt4" text="{data>AcceptanceCriteriaDescr}" wrapping="false" />
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="6rem">
                 <template>
-                    <m:Text id="txt5" text="{record}" wrapping="false" />
+                    <m:Text id="txt5" text="{data>DocContentDescr}" wrapping="false" />
                 </template>
             </Column>                        
             <Column id="cln6" label="{i18n>colFrequency}" width="6rem">
                 <template>
-                    <m:Text id="txt6" text="{frequency}" wrapping="false" />
+                    <m:Text id="txt6" text="{data>FrequencyDescr}" wrapping="false" />
                 </template>
             </Column>                        
-            <Column id="cln7" label="{i18n>colCode}" width="6rem">
+            <Column id="cln7" label="{i18n>colCodeEKATO}" width="8rem">
                 <template>
-                    <m:Text id="txt7" text="{code}" wrapping="false" />
+                    <m:Text id="txt7" text="{data>PCodeInternalDescr}" wrapping="false" />
                 </template>
             </Column>                        
-            <Column id="cln8" label="{i18n>colSignature}" width="6rem">
+            <Column id="cln8" label="{i18n>colCodeCustomer}" width="8rem">
                 <template>
-                    <m:Text id="txt8" text="{signature}" wrapping="false" />
+                    <m:Text id="txt8" text="{data>PCodeCustomerDescr}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln9" label="{i18n>colCodeThirdParty}" width="8rem">
+                <template>
+                    <m:Text id="txt9" text="{data>PCodeThirdPartyDescr}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln10" label="{i18n>colCodeSubVendor}" width="8rem">
+                <template>
+                    <m:Text id="txt10" text="{data>PCodeSubVendorDescr}" wrapping="false" />
+                </template>
+            </Column>                        
+            <Column id="cln11" label="{i18n>colLocation}" width="8rem">
+                <template>
+                    <m:Text id="txt11" text="{data>LocationDescr}" wrapping="false" />
                 </template>
             </Column>                        
 <!--            <Column id="cln2" width="9rem">
