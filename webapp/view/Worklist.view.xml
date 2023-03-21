@@ -17,7 +17,7 @@
 				<m:Text text="12.02.2023" />
    	</f:SimpleForm>      -->    
 
-    <TreeTable id="treeInspPlan" selectionMode="Multi"
+    <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
                visibleRowCount="15"
                visibleRowCountMode="Fixed"
@@ -54,9 +54,14 @@
           </m:HBox>
         </extension>
         <columns>
+        <Column id="sel1" width="6rem">
+                <template>
+                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
+                </template>
+            </Column>
             <Column id="cln1" label="{i18n>colNum}" width="16rem">
                 <template>
-                    <m:Text id="txt1" text="{data>InspItemDescr}" wrapping="false" />
+                    <m:Text id="txt1" text="{data>InspItemDescr}" class="parent1" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
@@ -66,7 +71,12 @@
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
                 <template>
-                    <m:Text id="txt3" text="" wrapping="false" />
+                    <m:Text id="txt3a" text="{data>Selectable}" wrapping="false" />
+                </template>
+            </Column>
+            <Column id="cln3a" label="{i18n>colProcedure}" width="9rem">
+                <template>
+                    <m:Text id="txt3b" text="{data>Selected}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
