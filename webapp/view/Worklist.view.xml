@@ -54,14 +54,12 @@
           </m:HBox>
         </extension>
         <columns>
-        <Column id="sel1" width="6rem">
-                <template>
-                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
-                </template>
-            </Column>
             <Column id="cln1" label="{i18n>colNum}" width="16rem">
                 <template>
-                    <m:Text id="txt1" text="{data>InspItemDescr}" class="parent1" wrapping="false" />
+                    <m:HBox id="_IDGenHBox1HBox">
+                    <m:Text id="txt1" text="{data>InspItemDescr}" class="" wrapping="false" />
+                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
+                    </m:HBox>
                 </template>
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
