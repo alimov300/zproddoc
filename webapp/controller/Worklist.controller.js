@@ -8,17 +8,22 @@ sap.ui.define(
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
+        oDataModel.setProperty("/SalesOrderKey", {
+          SalesOrderID: "30000634",
+          SalesOrderItem: "10",
+        });
         oCtrl.getView().setModel(oDataModel, "data");
       },
 
       onDownload() {
         const oCtrl = this;
-        const temp = "ITP_30000634_10.pdf";
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oKey = oDataModel.getProperty("/SalesOrderKey");
+        const temp = `ITP_${oKey.SalesOrderID}_${oKey.SalesOrderItem}.pdf`;
         const oServiceModel = oCtrl.getView().getModel();
         oServiceModel.read(`/ITPFormSet('${temp}')/$value`, {
           method: "GET",
           success(data) {
-            debugger;
             const fName = data.Filename;
             const fType = data.Filetype;
             const fContent = data.Filecontent;
@@ -31,13 +36,25 @@ sap.ui.define(
       onLoadITP() {
         const oCtrl = this;
         const oServiceModel = oCtrl.getView().getModel();
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oKey = oDataModel.getProperty("/SalesOrderKey");
         oServiceModel.read("/ITPStrucSet", {
           urlParameters: { $top: "9999" },
+          filters: [
+            new sap.ui.model.Filter(
+              "SalesOrderID",
+              sap.ui.model.FilterOperator.EQ,
+              oKey.SalesOrderID
+            ),
+            new sap.ui.model.Filter(
+              "SalesOrderItem",
+              sap.ui.model.FilterOperator.EQ,
+              oKey.SalesOrderItem
+            ),
+          ],
           success(data) {
             const { results } = data;
             const itpTree = oCtrl._unflatten(results);
-            const oDataModel = oCtrl.getView().getModel("data");
-
             oDataModel.setProperty("/itp", itpTree);
           },
         });

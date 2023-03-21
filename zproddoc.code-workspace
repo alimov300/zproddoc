@@ -1,8 +1,11 @@
 {
 	"folders": [
 		{
-			"name": "zproddoc",
-			"path": "../zproddoc"
+			"path": "."
+		},
+		{
+			"path": "../zprelimdoc"
 		}
-	]
+	],
+	"settings": {}
 }
