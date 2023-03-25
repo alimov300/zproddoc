@@ -56,7 +56,7 @@
         <columns>
             <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">
                 <template>
-                    <m:HBox id="_IDGenHBox1HBox">
+                    <m:HBox id="_IDGenHBox1HBox" class="parent2">
                     <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
                     <m:Text id="txt1" text="{data>InspItemDescr}" class="" wrapping="false" />
                     </m:HBox>
@@ -70,11 +70,6 @@
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
                 <template>
                     <m:Text id="txt3a" text="{data>Selectable}" wrapping="false" />
-                </template>
-            </Column>
-            <Column id="cln3a" label="{i18n>colProcedure}" width="9rem">
-                <template>
-                    <m:Text id="txt3b" text="{data>Selected}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
