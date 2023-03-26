@@ -139,7 +139,6 @@ sap.ui.define(
             ),
           ],
           success(data) {
-            debugger;
             const { results } = data;
             const aActivityScope = oDataModel.getProperty("/ActivityScope");
             aActivityScope.push({
@@ -152,7 +151,6 @@ sap.ui.define(
       },
 
       _enrichWithActScope(array) {
-        debugger;
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
