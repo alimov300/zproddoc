@@ -19,7 +19,9 @@
 
     <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
+               alternateRowColors="true" 
                visibleRowCount="15"
+               rowsUpdated="rowsUpdated"
                visibleRowCountMode="Fixed"
                rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
         <extension>
@@ -53,8 +55,11 @@
            </m:OverflowToolbar>
           </m:HBox>
         </extension>
+        <rowSettingsTemplate>
+            <RowSettings id="myhigh1" highlight="{= ${data>Selectable} ? null : 'Warning' }" />
+        </rowSettingsTemplate>
         <columns>
-            <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">
+            <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">            
                 <template>
                     <m:HBox id="_IDGenHBox1HBox" class="parent2">
                     <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />

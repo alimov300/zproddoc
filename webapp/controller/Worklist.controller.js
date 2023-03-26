@@ -198,5 +198,9 @@ sap.ui.define(
           .filter((el) => el.Fieldname === field)
           .map((el) => ({ value: el.Value, text: el.Text }));
       },
+
+      rowsUpdated(evt) {
+        debugger;
+      }
     })
 );
