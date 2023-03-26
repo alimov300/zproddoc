@@ -72,19 +72,19 @@
                 	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>ActivityScope'					
-				        }">
+				        }" value="{data>ActivityDescr}">
 				        <core:Item id="_IDGenItem1" key="{data>Activity}" text="{data>ActivityDescr}" />
 			        </m:ComboBox>
                 </template>
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
                 <template>
-                    <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
+                    <m:Text id="txt3a" text="{data>ActivityDescr}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
                 <template>
-                    <m:Text id="txt3ac" text="" wrapping="false" />
+                    <m:Text id="txt3ac" text="{data>ActivityDescr}" wrapping="false" />
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="6rem">
