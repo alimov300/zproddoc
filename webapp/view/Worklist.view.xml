@@ -1,4 +1,5 @@
-<mvc:View controllerName="zproddoc.controller.Worklist" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table">
+<mvc:View controllerName="zproddoc.controller.Worklist" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" 
+         displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table" xmlns:core="sap.ui.core">
     <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
         <m:Input id="inpSalesOrder" type="Number" liveChange="onReadPos" value="{data>/SalesOrder/SalesOrderID}" />
@@ -21,7 +22,6 @@
                enableColumnReordering="false"
                alternateRowColors="true" 
                visibleRowCount="15"
-               rowsUpdated="rowsUpdated"
                visibleRowCountMode="Fixed"
                rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
         <extension>
@@ -69,12 +69,18 @@
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template>
-                    <m:Text id="txt2" text="{data>ActivityDescr}" wrapping="false" />
+                	<m:ComboBox id="_IDGenComboBox1"
+				        items="{
+					        path: 'data>/ActivityScope/0/Activities'					
+				        }">
+				        <core:Item id="_IDGenItem1" key="{data>Activity}" text="{data>ActivityDescr}" />
+			        </m:ComboBox>
+                    <!-- <m:Text id="txt2" text="{data>ActivityDescr}" wrapping="false" /> -->
                 </template>
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
                 <template>
-                    <m:Text id="txt3a" text="{data>Selectable}" wrapping="false" />
+                    <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
