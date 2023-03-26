@@ -75,7 +75,6 @@
 				        }">
 				        <core:Item id="_IDGenItem1" key="{data>Activity}" text="{data>ActivityDescr}" />
 			        </m:ComboBox>
-                    <!-- <m:Text id="txt2" text="{data>ActivityDescr}" wrapping="false" /> -->
                 </template>
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
@@ -85,42 +84,77 @@
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
                 <template>
-                    <m:Text id="txt4" text="{data>AcceptanceCriteriaDescr}" wrapping="false" />
+                    <m:Text id="txt3ac" text="" wrapping="false" />
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="6rem">
                 <template>
-                    <m:Text id="txt5" text="{data>DocContentDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1dc" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/DocContent'					
+				        }">
+				        <core:Item id="_IDGenItem1dc" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln6" label="{i18n>colFrequency}" width="6rem">
                 <template>
-                    <m:Text id="txt6" text="{data>FrequencyDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1fr" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/Frequency'					
+				        }">
+				        <core:Item id="_IDGenItem1fr" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln7" label="{i18n>colCodeEKATO}" width="8rem">
                 <template>
-                    <m:Text id="txt7" text="{data>PCodeInternalDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1ekato" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/PCode'					
+				        }">
+				        <core:Item id="_IDGenItem1ekato" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln8" label="{i18n>colCodeCustomer}" width="8rem">
                 <template>
-                    <m:Text id="txt8" text="{data>PCodeCustomerDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1cust" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/PCode'					
+				        }">
+				        <core:Item id="_IDGenItem1cust" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln9" label="{i18n>colCodeThirdParty}" width="8rem">
                 <template>
-                    <m:Text id="txt9" text="{data>PCodeThirdPartyDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1tp" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/PCode'					
+				        }">
+				        <core:Item id="_IDGenItem1tp" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln10" label="{i18n>colCodeSubVendor}" width="8rem">
                 <template>
-                    <m:Text id="txt10" text="{data>PCodeSubVendorDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1csv" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/PCode'					
+				        }">
+				        <core:Item id="_IDGenItem1csv" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln11" label="{i18n>colLocation}" width="8rem">
                 <template>
-                    <m:Text id="txt11" text="{data>LocationDescr}" wrapping="false" />
+                    <m:ComboBox id="_IDGenComboBox1loc" visible="{= ${data>Selectable} ? true : false }" 
+				        items="{
+					        path: 'data>/fixedVals/Location'					
+				        }">
+				        <core:Item id="_IDGenItem1loc" key="{data>value}" text="{data>text}" />
+			        </m:ComboBox>
                 </template>
             </Column>                        
 <!--            <Column id="cln2" width="9rem">
