@@ -2,3 +2,11 @@
 .parent1 {
     background-color: #c0c2ff;
 }
+
+tr[data-sap-ui-level="0"] {
+    background-color: #d3d3d3
+}
+
+tr[data-sap-ui-level="1"] {
+    background-color: #f2f2f2
+}

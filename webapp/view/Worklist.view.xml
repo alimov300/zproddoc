@@ -21,7 +21,7 @@
     <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
                alternateRowColors="true" 
-               visibleRowCount="15"
+               visibleRowCount="15"               
                visibleRowCountMode="Fixed"
                rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
         <extension>
@@ -69,7 +69,7 @@
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template>
-                	<m:ComboBox id="_IDGenComboBox1"
+                	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/ActivityScope/0/Activities'					
 				        }">
