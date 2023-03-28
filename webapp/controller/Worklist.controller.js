@@ -4,7 +4,7 @@ sap.ui.define(
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
 
-  /* oDataModel: { globals:{ specialActivity:85 }, SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
+  /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
    */
 
   (Controller, JSONModel) =>
@@ -18,6 +18,10 @@ sap.ui.define(
           SalesOrderItem: "10",
         });
         oDataModel.setProperty("/ActivityScope", []);
+        oDataModel.setProperty("dispOptions", {
+          selectedOnly: false,
+          isExtendedDelivery: false,
+        });
         oCtrl.getView().setModel(oDataModel, "data");
       },
 
@@ -111,6 +115,7 @@ sap.ui.define(
             ),
           ],
           success(data) {
+            debugger;
             const { results } = data;
             oCtrl._enrichWithActScope(results);
             const itpTree = oCtrl._unflatten(results);

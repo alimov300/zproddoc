@@ -29,14 +29,14 @@
            <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
 
-            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false">
+            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="{data>/dispOptions/selectedOnly}">
 				<m:layoutData>
 					<m:FlexItemData id="fidSelectedOnly" growFactor="1" />
 				</m:layoutData>
 			</m:Switch>
             <m:Label id="lblSelectedOnly" text="{i18n>lblSelectedOnly}" labelFor="switchSelectedOnly" />
 
-            <m:Switch id="switchExtendedDelivery" type="AcceptReject" state="false">
+            <m:Switch id="switchExtendedDelivery" type="AcceptReject" state="{data>/dispOptions/isExtendedDelivery}">
 				<m:layoutData>
 					<m:FlexItemData id="fidExtendedDelivery" growFactor="1"/>
 				</m:layoutData>
@@ -63,7 +63,7 @@
                 <template>
                     <m:HBox id="_IDGenHBox1HBox" class="parent2">
                     <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
-                    <m:Text id="txt1" text="{data>InspItemDescr}" class="" wrapping="false" />
+                    <m:Label id="txt1" text="{data>InspItemDescr}" class="sapUiTinyMarginTop" wrapping="false" />
                     </m:HBox>
                 </template>
             </Column>
@@ -77,19 +77,19 @@
 			        </m:ComboBox>
                 </template>
             </Column>
-            <Column id="cln3" label="{i18n>colProcedure}" width="9rem">
+            <Column id="cln3" label="{i18n>colProcedure}" width="12rem">
                 <template>
                     <m:Text id="txt3a" text="{data>ActivityDescr}" wrapping="false" />
                 </template>
             </Column>
-            <Column id="cln4" label="{i18n>colAcceptCriteria}" width="9rem">
+            <Column id="cln4" label="{i18n>colAcceptCriteria}" width="12rem">
                 <template>
                     <m:Text id="txt3ac" text="{data>ActivityDescr}" wrapping="false" />
                 </template>
             </Column>                        
-            <Column id="cln5" label="{i18n>colRecord}" width="6rem">
+            <Column id="cln5" label="{i18n>colRecord}" width="12rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1dc" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1dc" selectedKey="{data>DocContent}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/DocContent'					
 				        }">
@@ -97,9 +97,9 @@
 			        </m:ComboBox>
                 </template>
             </Column>                        
-            <Column id="cln6" label="{i18n>colFrequency}" width="6rem">
+            <Column id="cln6" label="{i18n>colFrequency}" width="12rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1fr" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1fr" selectedKey="{data>Frequency}"  visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/Frequency'					
 				        }">
@@ -109,7 +109,7 @@
             </Column>                        
             <Column id="cln7" label="{i18n>colCodeEKATO}" width="8rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1ekato" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1ekato" selectedKey="{data>PCodeInternal}"  visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode'					
 				        }">
@@ -119,7 +119,7 @@
             </Column>                        
             <Column id="cln8" label="{i18n>colCodeCustomer}" width="8rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1cust" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1cust" selectedKey="{data>PCodeCustomer}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode'					
 				        }">
@@ -129,7 +129,7 @@
             </Column>                        
             <Column id="cln9" label="{i18n>colCodeThirdParty}" width="8rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1tp" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1tp" selectedKey="{data>PCodeThirdParty}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode'					
 				        }">
@@ -139,7 +139,7 @@
             </Column>                        
             <Column id="cln10" label="{i18n>colCodeSubVendor}" width="8rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1csv" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1csv" selectedKey="{data>PCodeSubVendor}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode'					
 				        }">
@@ -149,7 +149,7 @@
             </Column>                        
             <Column id="cln11" label="{i18n>colLocation}" width="8rem">
                 <template>
-                    <m:ComboBox id="_IDGenComboBox1loc" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1loc" selectedKey="{data>Location}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
 					        path: 'data>/fixedVals/Location'					
 				        }">

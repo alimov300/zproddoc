@@ -12,3 +12,9 @@ tr[data-sap-ui-level="1"] {
 tr[data-sap-ui-level="2"] {
     background-color: #fafafa
 }
+
+/* .sapUiMedia-Std-Desktop .sapUShellApplicationContainer.sapUShellApplicationContainerLimitedWidth {
+    width: 100% !important; }
+
+.sapMShellCentralBox {
+            width: 100% !important; } */
