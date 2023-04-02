@@ -29,7 +29,7 @@
            <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
 
-            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="{data>/dispOptions/selectedOnly}">
+            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false" change="switchSelectChange">
 				<m:layoutData>
 					<m:FlexItemData id="fidSelectedOnly" growFactor="1" />
 				</m:layoutData>

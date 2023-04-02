@@ -1,5 +1,7 @@
 sap.ui.define(
-  ["sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel"],
+  ["sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel",
+  "sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
@@ -7,7 +9,7 @@ sap.ui.define(
   /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
    */
 
-  (Controller, JSONModel) =>
+  (Controller, JSONModel, Filter, FilterOperator) =>
     Controller.extend("zproddoc.controller.Worklist", {
       onInit() {
         const oCtrl = this;
@@ -122,6 +124,17 @@ sap.ui.define(
             oDataModel.setProperty("/itp", itpTree);
           },
         });
+      },
+
+      switchSelectChange(evt) {
+
+        debugger;
+        if(evt.getParameter("state") === true){
+          this.byId("treeInspPlan").getBinding().filter(new Filter("Selected", FilterOperator.EQ, true), "Application");
+        }else{
+          this.byId("treeInspPlan").getBinding().filter(null, "Application");
+        }
+
       },
 
       loadActivityScope(salesOrder) {
