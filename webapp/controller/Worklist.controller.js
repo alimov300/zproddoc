@@ -1,7 +1,10 @@
 sap.ui.define(
-  ["sap/ui/core/mvc/Controller", "sap/ui/model/json/JSONModel",
-  "sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"],
+  [
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+  ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
@@ -15,7 +18,6 @@ sap.ui.define(
         const oCtrl = this;
         const oDataModel = new JSONModel({});
         oDataModel.setProperty("/SalesOrder", {
-          //temp
           SalesOrderID: "30000634",
           SalesOrderItem: "10",
         });
@@ -117,24 +119,53 @@ sap.ui.define(
             ),
           ],
           success(data) {
-            debugger;
             const { results } = data;
             oCtrl._enrichWithActScope(results);
             const itpTree = oCtrl._unflatten(results);
             oDataModel.setProperty("/itp", itpTree);
+            oCtrl.applyFilters();
           },
         });
       },
 
-      switchSelectChange(evt) {
+      applyFilters() {
+        //switchSelectedOnly switchExtendedDelivery
+        let aFilter = [];
+        const oCntrl = this;
 
-        debugger;
-        if(evt.getParameter("state") === true){
-          this.byId("treeInspPlan").getBinding().filter(new Filter("Selected", FilterOperator.EQ, true), "Application");
-        }else{
-          this.byId("treeInspPlan").getBinding().filter(null, "Application");
+        if (oCntrl.getView().byId("switchSelectedOnly").getState()) {
+          aFilter.push(new Filter("Selected", FilterOperator.EQ, true));
         }
 
+        if (!oCntrl.getView().byId("switchExtendedDelivery").getState()) {
+          aFilter.push(
+            new Filter("IsExtendedDelivery", FilterOperator.EQ, false)
+          );
+        }
+
+        this.byId("treeInspPlan")
+          .getBinding()
+          .filter(new Filter(aFilter, true));
+      },
+
+      onSelectOnlyToggle(evt) {
+        if (evt.getParameter("state")) {
+          this.byId("treeInspPlan")
+            .getBinding()
+            .filter(new Filter("Selected", FilterOperator.EQ, true));
+        } else {
+          this.byId("treeInspPlan").getBinding().filter(null);
+        }
+      },
+
+      onExtendedDeliveryToggle(evt) {
+        if (evt.getParameter("state")) {
+          this.byId("treeInspPlan")
+            .getBinding()
+            .filter(new Filter("IsExtendedDelivery", FilterOperator.EQ, true));
+        } else {
+          this.byId("treeInspPlan").getBinding().filter(null);
+        }
       },
 
       loadActivityScope(salesOrder) {
@@ -166,6 +197,10 @@ sap.ui.define(
             oDataModel.setProperty("/ActivityScope", aActivityScope);
           },
         });
+      },
+
+      onActivityChange(par1, par2) {
+        debugger;
       },
 
       _enrichWithActScope(array) {

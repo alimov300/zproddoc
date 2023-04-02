@@ -29,19 +29,19 @@
            <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
 
-            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false" change="switchSelectChange">
+            <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false" change="onSelectOnlyToggle">
 				<m:layoutData>
 					<m:FlexItemData id="fidSelectedOnly" growFactor="1" />
 				</m:layoutData>
 			</m:Switch>
             <m:Label id="lblSelectedOnly" text="{i18n>lblSelectedOnly}" labelFor="switchSelectedOnly" />
 
-            <m:Switch id="switchExtendedDelivery" type="AcceptReject" state="{data>/dispOptions/isExtendedDelivery}">
+            <m:Switch id="switchExtendedDelivery" type="AcceptReject" state="false" change="applyFilters">
 				<m:layoutData>
 					<m:FlexItemData id="fidExtendedDelivery" growFactor="1"/>
 				</m:layoutData>
 			</m:Switch>
-            <m:Label id="lblExtendedDelivery" text="{i18n>lblExtendedDelivery}" labelFor="switchExtendedDelivery" />
+            <m:Label id="lblExtendedDelivery" text="{i18n>lblExtendedDelivery}" labelFor="applyFilters" />
 
             <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
 
@@ -69,7 +69,7 @@
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template>
-                	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" 
+                	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange"
 				        items="{
 					        path: 'data>ActivityScope'					
 				        }" value="{data>ActivityDescr}">
