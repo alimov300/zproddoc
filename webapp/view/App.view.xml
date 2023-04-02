@@ -3,7 +3,7 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
 
-    <Shell id="main">  
+    <Shell id="main" appWidthLimited="false">  
 	  <App
 		id="app"
 		busy="{appView>/busy}"
