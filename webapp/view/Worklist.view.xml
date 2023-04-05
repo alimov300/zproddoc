@@ -79,12 +79,12 @@
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="12rem">
                 <template>
-                    <m:Text id="txt3a" text="{data>ActivityDescr}" wrapping="false" />
+                    <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="12rem">
                 <template>
-                    <m:Text id="txt3ac" text="{data>ActivityDescr}" wrapping="false" />
+                    <m:Text id="txt3ac" text="{data>AcceptCritDescr}" wrapping="false" />
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="12rem">

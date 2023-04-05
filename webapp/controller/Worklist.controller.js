@@ -199,8 +199,20 @@ sap.ui.define(
         });
       },
 
-      onActivityChange(par1, par2) {
+      onActivityChange(par1) {
         debugger;
+
+        const sKey = par1.getParameter("selectedItem").getProperty("key");
+        const sPath = par1.getSource().getBindingInfo("items").binding.getContext().getPath();
+        const oObject = this.getView().getModel("data").getObject(sPath);
+
+        const oActScope = oObject.ActivityScope
+          .find((el) => el.Activity === sKey);
+
+          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,oActScope.ItpProcedureDescr  );
+          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,oActScope.AcceptCritDescr  );
+
+
       },
 
       _enrichWithActScope(array) {
