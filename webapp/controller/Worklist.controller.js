@@ -18,8 +18,8 @@ sap.ui.define(
         const oCtrl = this;
         const oDataModel = new JSONModel({});
         oDataModel.setProperty("/SalesOrder", {
-          SalesOrderID: "30000634",
-          SalesOrderItem: "10",
+          SalesOrderID: "0000079672",
+          SalesOrderItem: "001040",
         });
         oDataModel.setProperty("/ActivityScope", []);
         oDataModel.setProperty("dispOptions", {
@@ -32,7 +32,7 @@ sap.ui.define(
       onAfterRendering() {
         const oCtrl = this;
         oCtrl.readFixedValues();
-        oCtrl.onReadPos(); //temp
+        oCtrl.onReadPos(); // temp
       },
 
       readFixedValues() {
@@ -129,8 +129,8 @@ sap.ui.define(
       },
 
       applyFilters() {
-        //switchSelectedOnly switchExtendedDelivery
-        let aFilter = [];
+        // switchSelectedOnly switchExtendedDelivery
+        const aFilter = [];
         const oCntrl = this;
 
         if (oCntrl.getView().byId("switchSelectedOnly").getState()) {
@@ -203,16 +203,26 @@ sap.ui.define(
         debugger;
 
         const sKey = par1.getParameter("selectedItem").getProperty("key");
-        const sPath = par1.getSource().getBindingInfo("items").binding.getContext().getPath();
+        const sPath = par1
+          .getSource()
+          .getBindingInfo("items")
+          .binding.getContext()
+          .getPath();
         const oObject = this.getView().getModel("data").getObject(sPath);
 
-        const oActScope = oObject.ActivityScope
-          .find((el) => el.Activity === sKey);
+        const oActScope = oObject.ActivityScope.find(
+          (el) => el.Activity === sKey
+        );
 
-          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,oActScope.ItpProcedureDescr  );
-          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,oActScope.AcceptCritDescr  );
-
-
+        this.getView()
+          .getModel("data")
+          .setProperty(
+            `${sPath}/ItpProcedureDescr`,
+            oActScope.ItpProcedureDescr
+          );
+        this.getView()
+          .getModel("data")
+          .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
       },
 
       _enrichWithActScope(array) {
