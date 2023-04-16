@@ -79,7 +79,7 @@
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="12rem">
                 <template>
-                    <m:HBox id="_IDGenHBox1HBox3ab">
+                    <m:HBox id="_IDGenHBox1HBox3ab" justifyContent="End" alignItems="Center">
                     <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
                     <m:Button id="txt3ab" text="..." press="onProcedurePress" visible="{= ${data>SpecialMode} === true }"/>
                     </m:HBox>
@@ -87,7 +87,7 @@
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="12rem">
                 <template>
-                    <m:HBox id="_IDGenHBox1HBox3ac">
+                    <m:HBox id="_IDGenHBox1HBox3ac" justifyContent="End" alignItems="Center">
                     <m:Text id="txt3ac" text="{data>AcceptCritDescr}" wrapping="false" />
                     <m:Button id="txt3acb" text="..." press="onAccCriteriaPress" visible="{= ${data>SpecialMode} === true }"/>
                     </m:HBox>

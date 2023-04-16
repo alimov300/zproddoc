@@ -249,35 +249,21 @@ sap.ui.define(
 				oControl = oEvent.getSource();
 
         const sPath = oEvent.getSource().getBindingInfo("visible").binding.getBindings()[0].getContext().getPath();
-				//oView = this.getView();
-
-        //const sKey = oEvent.getParameter("selectedItem").getProperty("key");
-        //const sPath = oEvent.getSource().getBindingInfo("items").binding.getContext().getPath();
-        //const oObject = this.getView().getModel("data").getObject(sPath);
 
         const oTextArea = new sap.m.TextArea({
           value: oEvent.getSource().getModel("data").getProperty(`${sPath}/ItpProcedureDescr`)
         } );
-        // oTextArea.bindProperty("value",{ 
-        //   path: `${sPath}/ItpProcedureDescr`,
-        //   mode: BindingMode.TwoWay,
-        //   model: "data"
-        // });
 
-        if (true) {
-
-            this.mPopover = new Popover({
+        this.mPopover = new Popover({
               content: [
                 oTextArea
               ],
               beginButton: [ new Button({text: "save", press: this.popoverActionPress}) ],
               showHeader: false
-            });
+        });
 
-          }
-          this.mPopover.openBy(oEvent.getSource());
+        this.mPopover.openBy(oEvent.getSource());
  
-
       },
 
       onAccCriteriaPress(oEvent){
@@ -285,9 +271,22 @@ sap.ui.define(
 
         var oCtx = oEvent.getSource().getBindingContext(),
 				oControl = oEvent.getSource();
-				//oView = this.getView();
 
-        //this.mPopover.close();
+        const sPath = oEvent.getSource().getBindingInfo("visible").binding.getBindings()[0].getContext().getPath();
+
+        const oTextArea = new sap.m.TextArea({
+          value: oEvent.getSource().getModel("data").getProperty(`${sPath}/AcceptCritDescr`)
+        } );
+
+        this.mPopover = new Popover({
+              content: [
+                oTextArea
+              ],
+              beginButton: [ new Button({text: "save", press: this.popoverAccCriteriaPress}) ],
+              showHeader: false
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
 
       },
 
@@ -308,7 +307,25 @@ sap.ui.define(
 
         // this.getParent().getParent().getParent()._oControl._oOpenBy.getModel("data").getObject()
 
-        //this.mPopover.close();
+        oControl.getParent().getParent().getParent().close()
+
+      },
+
+      popoverAccCriteriaPress(oEvent){       
+        var oCtx = oEvent.getSource().getBindingContext();
+				var oControl = oEvent.getSource();
+				//oView = this.getView();
+
+        let oButton = oControl.getParent().getParent().getParent()._oControl._oOpenBy;
+        let sValue = oControl.getParent().getParent().getContent()[0].getValue();
+        let sPath = oControl.getParent().getParent().getParent()._oControl._oOpenBy.getBindingInfo("visible").binding.getBindings(0)[0].getContext().getPath();
+        let oModel = oControl.getParent().getParent().getParent()._oControl._oOpenBy.getModel("data");
+
+        debugger;
+
+        oModel.setProperty(`${sPath}/AcceptCritDescr`, sValue);
+
+        oControl.getParent().getParent().getParent().close()
 
       },
 
