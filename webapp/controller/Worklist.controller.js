@@ -4,6 +4,9 @@ sap.ui.define(
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
+    "sap/m/ResponsivePopover",
+    "sap/m/Button",
+    "sap/ui/model/BindingMode",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -12,7 +15,15 @@ sap.ui.define(
   /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
    */
 
-  (Controller, JSONModel, Filter, FilterOperator) =>
+  (
+    Controller,
+    JSONModel,
+    Filter,
+    FilterOperator,
+    Popover,
+    Button,
+    BindingMode
+  ) =>
     Controller.extend("zproddoc.controller.Worklist", {
       onInit() {
         const oCtrl = this;
@@ -22,6 +33,7 @@ sap.ui.define(
           SalesOrderItem: "001040",
         });
         oDataModel.setProperty("/ActivityScope", []);
+
         oDataModel.setProperty("dispOptions", {
           selectedOnly: false,
           isExtendedDelivery: false,
@@ -200,8 +212,6 @@ sap.ui.define(
       },
 
       onActivityChange(par1) {
-        debugger;
-
         const sKey = par1.getParameter("selectedItem").getProperty("key");
         const sPath = par1
           .getSource()
