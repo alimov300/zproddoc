@@ -6,7 +6,8 @@ sap.ui.define(
     "sap/ui/model/FilterOperator",
     "sap/m/ResponsivePopover",
     "sap/m/Button",
-    "sap/ui/model/BindingMode"
+    "sap/ui/model/BindingMode",
+    "../model/formatter"
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -15,8 +16,9 @@ sap.ui.define(
   /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
    */
 
-  (Controller, JSONModel, Filter, FilterOperator, Popover, Button, BindingMode) =>
+  (Controller, JSONModel, Filter, FilterOperator, Popover, Button, BindingMode, formatter) =>
     Controller.extend("zproddoc.controller.Worklist", {
+      formatter,
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
