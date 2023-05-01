@@ -79,18 +79,27 @@
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="12rem">
                 <template>
-                    <m:HBox id="_IDGenHBox1HBox3ab" justifyContent="End" alignItems="Center">
-                    <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
-                    <m:Button id="txt3ab" text="..." press="onProcedurePress" visible="{= ${data>SpecialMode} === true }"/>
-                    </m:HBox>
+                    <m:HBox id="_IDGenHBox1HBox3ab" width="100%" alignItems="Center"> 
+                      <m:HBox id="_IDGenHBox1HBox31ab" width="70%" justifyContent="Start" alignItems="Center">
+                        <m:Text id="txt3a" text="{data>ItpProcedureDescr}" wrapping="false" />
+                      </m:HBox>
+                      <m:HBox id="_IDGenHBox1HBox32ab" width="30%" justifyContent="End" alignItems="Center">
+                        <m:Button id="txt3ab" text="..." press="onProcedurePress" visible="{= ${data>SpecialMode} === true }"/>
+                      </m:HBox>
+                   </m:HBox>  
+
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="12rem">
                 <template>
-                    <m:HBox id="_IDGenHBox1HBox3ac" justifyContent="End" alignItems="Center">
-                    <m:Text id="txt3ac" text="{data>AcceptCritDescr}" wrapping="false" />
-                    <m:Button id="txt3acb" text="..." press="onAccCriteriaPress" visible="{= ${data>SpecialMode} === true }"/>
-                    </m:HBox>
+                    <m:HBox id="_IDGenHBox1HBox3ac" width="100%" alignItems="Center"> 
+                      <m:HBox id="_IDGenHBox1HBox31ac" width="70%" justifyContent="Start" alignItems="Center">
+                        <m:Text id="txt3acc" text="{data>AcceptCritDescr}" wrapping="false" />
+                      </m:HBox>
+                      <m:HBox id="_IDGenHBox1HBox32ac" width="30%" justifyContent="End" alignItems="Center">
+                        <m:Button id="txt3abc" text="..." press="onAccCriteriaPress" visible="{= ${data>SpecialMode} === true }"/>
+                      </m:HBox>
+                   </m:HBox>  
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="12rem">

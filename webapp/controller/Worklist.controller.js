@@ -44,7 +44,7 @@ sap.ui.define(
       onAfterRendering() {
         const oCtrl = this;
         oCtrl.readFixedValues();
-        oCtrl.onReadPos(); // temp
+        oCtrl.onReadPos(); //temp
       },
 
       readFixedValues() {
@@ -141,8 +141,8 @@ sap.ui.define(
       },
 
       applyFilters() {
-        // switchSelectedOnly switchExtendedDelivery
-        const aFilter = [];
+        //switchSelectedOnly switchExtendedDelivery
+        let aFilter = [];
         const oCntrl = this;
 
         if (oCntrl.getView().byId("switchSelectedOnly").getState()) {
@@ -224,15 +224,146 @@ sap.ui.define(
           (el) => el.Activity === sKey
         );
 
-        this.getView()
-          .getModel("data")
-          .setProperty(
-            `${sPath}/ItpProcedureDescr`,
-            oActScope.ItpProcedureDescr
-          );
-        this.getView()
-          .getModel("data")
-          .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
+        if (oActScope.IsSpecial) {
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/ItpProcedureDescr`, "");
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCritDescr`, "");
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/SpecialMode`, true);
+        } else {
+          this.getView()
+            .getModel("data")
+            .setProperty(
+              `${sPath}/ItpProcedureDescr`,
+              oActScope.ItpProcedureDescr
+            );
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/SpecialMode`, false);
+        }
+      },
+
+      onProcedurePress(oEvent) {
+        const sPath = oEvent
+          .getSource()
+          .getBindingInfo("visible")
+          .binding.getBindings()[0]
+          .getContext()
+          .getPath();
+
+        const oTextArea = new sap.m.TextArea({
+          value: oEvent
+            .getSource()
+            .getModel("data")
+            .getProperty(`${sPath}/ItpProcedureDescr`),
+        });
+
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [
+            new Button({
+              icon: "sap-icon://accept",
+              text: "",
+              press: this.popoverActionPress,
+            }),
+          ],
+          showHeader: false,
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
+      },
+
+      onAccCriteriaPress(oEvent) {
+        const sPath = oEvent
+          .getSource()
+          .getBindingInfo("visible")
+          .binding.getBindings()[0]
+          .getContext()
+          .getPath();
+
+        const oTextArea = new sap.m.TextArea({
+          value: oEvent
+            .getSource()
+            .getModel("data")
+            .getProperty(`${sPath}/AcceptCritDescr`),
+        });
+
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [
+            new Button({
+              icon: "sap-icon://accept",
+              text: "",
+              press: this.popoverAccCriteriaPress,
+            }),
+          ],
+          showHeader: false,
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
+      },
+
+      popoverActionPress(oEvent) {
+        const oControl = oEvent.getSource();
+
+        let oButton = oControl.getParent().getParent().getParent()
+          ._oControl._oOpenBy;
+        let sValue = oControl
+          .getParent()
+          .getParent()
+          .getContent()[0]
+          .getValue();
+        let sPath = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getBindingInfo("visible")
+          .binding.getBindings(0)[0]
+          .getContext()
+          .getPath();
+        let oModel = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getModel("data");
+
+        oModel.setProperty(`${sPath}/ItpProcedureDescr`, sValue);
+
+        oControl.getParent().getParent().getParent().close();
+      },
+
+      popoverAccCriteriaPress(oEvent) {
+        const oControl = oEvent.getSource();
+        let oButton = oControl.getParent().getParent().getParent()
+          ._oControl._oOpenBy;
+        let sValue = oControl
+          .getParent()
+          .getParent()
+          .getContent()[0]
+          .getValue();
+        let sPath = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getBindingInfo("visible")
+          .binding.getBindings(0)[0]
+          .getContext()
+          .getPath();
+        let oModel = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getModel("data");
+
+        oModel.setProperty(`${sPath}/AcceptCritDescr`, sValue);
+        oControl.getParent().getParent().getParent().close();
       },
 
       _enrichWithActScope(array) {
