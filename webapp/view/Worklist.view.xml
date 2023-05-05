@@ -2,7 +2,7 @@
          displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table" xmlns:core="sap.ui.core">
     <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
-        <m:Input id="inpSalesOrder" type="Number" liveChange="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" />
+        <m:Input id="inpSalesOrder" type="Number" change="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" />
 
         <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
         <m:Select id="selSalesOrderItem"
@@ -10,10 +10,10 @@
 					selectedKey="{data>/SalesOrder/SalesOrderItem}"
                     change="onReadPos"
 					items="{
-						path: '/ProductCollection',
-						sorter: { path: 'Name' }
+						path: 'data>/SalesItems',
+                        sorter: 'SalesOrderItem'
 					}">
-					<core:ListItem id="selSalesOrderListItem" key="{SalesOrderItem}" text="{SalesOrderItem}" icon="{path:'ITPStatus', formatter:'.SDItemIcon'}"/>
+					<core:ListItem id="selSalesOrderListItem" key="{data>SalesOrderItem}" text="{data>SalesOrderItem}" icon="{path:'data>ItpState', formatter:'.formatter.SDItemIcon'}"/>
 		</m:Select>
     </m:HBox>
 

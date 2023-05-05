@@ -14,7 +14,7 @@ sap.ui.define(
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
 
-  /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
+  /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, SalesItems:[] fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
    */
 
   (
@@ -36,8 +36,11 @@ sap.ui.define(
         oDataModel.setProperty("/SalesOrder", {
           SalesOrderID: "",
           SalesOrderItem: "",
+          Plant: "",
+          ItpScope: "",
         });
         oDataModel.setProperty("/ActivityScope", []);
+        oDataModel.setProperty("/SalesItems", []);
 
         oDataModel.setProperty("dispOptions", {
           selectedOnly: false,
@@ -94,7 +97,12 @@ sap.ui.define(
           ],
 
           success(data) {
-            debugger;
+            const { results } = data;
+            const aSalesItems = results.map((e) => ({
+              SalesOrderItem: +e.SalesOrderItem,
+              ItpState: e.ItpState,
+            }));
+            oDataModel.setProperty("/SalesItems", aSalesItems);
           },
         });
       },
