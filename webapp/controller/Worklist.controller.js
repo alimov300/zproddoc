@@ -8,6 +8,7 @@ sap.ui.define(
     "sap/m/Button",
     "sap/ui/model/BindingMode",
     "sap/m/MessageToast",
+    "../model/formatter",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -24,9 +25,11 @@ sap.ui.define(
     Popover,
     Button,
     BindingMode,
-    MessageToast
+    MessageToast,
+    formatter
   ) =>
     Controller.extend("zproddoc.controller.Worklist", {
+      formatter,
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
