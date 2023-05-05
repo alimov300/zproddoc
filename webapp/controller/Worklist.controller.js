@@ -7,6 +7,7 @@ sap.ui.define(
     "sap/m/ResponsivePopover",
     "sap/m/Button",
     "sap/ui/model/BindingMode",
+    "sap/m/MessageToast",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -22,15 +23,16 @@ sap.ui.define(
     FilterOperator,
     Popover,
     Button,
-    BindingMode
+    BindingMode,
+    MessageToast
   ) =>
     Controller.extend("zproddoc.controller.Worklist", {
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
         oDataModel.setProperty("/SalesOrder", {
-          SalesOrderID: "0000079672",
-          SalesOrderItem: "001040",
+          SalesOrderID: "",
+          SalesOrderItem: "",
         });
         oDataModel.setProperty("/ActivityScope", []);
 
@@ -44,7 +46,7 @@ sap.ui.define(
       onAfterRendering() {
         const oCtrl = this;
         oCtrl.readFixedValues();
-        oCtrl.onReadPos(); //temp
+        // oCtrl.onReadPos();
       },
 
       readFixedValues() {
@@ -73,13 +75,34 @@ sap.ui.define(
         });
       },
 
+      onReadOrder() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+        oServiceModel.read("/SalesOrderInfoSet", {
+          method: "GET",
+          filters: [
+            new sap.ui.model.Filter(
+              "SalesOrderID",
+              sap.ui.model.FilterOperator.EQ,
+              oSalesOrder.SalesOrderID
+            ),
+          ],
+
+          success(data) {
+            debugger;
+          },
+        });
+      },
+
       onReadPos() {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const oServiceModel = oCtrl.getView().getModel();
         oServiceModel.read(
-          `/SalesOrderInfo(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}')`,
+          `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}')`,
           {
             method: "GET",
             success(data) {
@@ -91,6 +114,26 @@ sap.ui.define(
             },
           }
         );
+      },
+
+      onSaveITP() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+        const aITPStruc = oDataModel.getProperty("/itp");
+        const oITP = {
+          SalesOrderID: oSalesOrder.SalesOrderID,
+          SalesOrderItem: oSalesOrder.SalesOrderItem,
+          OrderToITPStruc: oCtrl._flatten(aITPStruc),
+        };
+        oServiceModel.create("/SalesOrderInfoSet", oITP, {
+          method: "POST",
+          success() {
+            MessageToast.show(this.getResourceBundle().getText("msgITPSaved"));
+          },
+          error() {},
+        });
       },
 
       onDownload() {
@@ -274,6 +317,49 @@ sap.ui.define(
           });
         }
         return tree;
+      },
+
+      _flatten(tree) {
+        const array = [];
+        // parent = typeof parent !== "undefined" ? parent : { NodeKey: "" };
+
+        tree.forEach((el) => {
+          if (el.Selected) {
+            array.push({
+              NodeKey: el.NodeKey,
+              ParentNodeKey: el.ParentNodeKey,
+              InspItem: el.InspItem,
+              Activity: el.Activity,
+              ActivityPlnGr: el.Activity,
+              IsSpecial: el.IsSpecial,
+              ItpProcedure: el.ItpProcedure,
+              ItpProcedureDescr: el.ItpProcedureDescr,
+              AcceptCrit: el.AcceptCrit,
+              AcceptCritDescr: el.AcceptCritDescr,
+              DocContent: el.DocContent,
+              Frequency: el.Frequency,
+              PCodeInternal: el.PCodeInternal,
+              PCodeCustomer: el.PCodeCustomer,
+              PCodeThirdParty: el.PCodeThirdParty,
+              PCodeSubVendor: el.PCodeSubVendor,
+              Location: el.Location,
+              isExtendedDelivery: el.isExtendedDelivery,
+            });
+          } else if (el.children) {
+            array.push(...this._flatten(el.children));
+          }
+        });
+        /* if (children.length > 0) {
+          if (parent.NodeKey === "") {
+            tree = children;
+          } else {
+            parent.children = children;
+          }
+          children.forEach((child) => {
+            array.push(...this._flatten(array, child));
+          });
+        }  */
+        return array;
       },
 
       _getFixedVal(array, field) {

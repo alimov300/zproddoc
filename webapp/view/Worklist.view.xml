@@ -2,21 +2,20 @@
          displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table" xmlns:core="sap.ui.core">
     <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
-        <m:Input id="inpSalesOrder" type="Number" liveChange="onReadPos" value="{data>/SalesOrder/SalesOrderID}" />
-        <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
-        <m:Input id="inpSalesOrderPos" type="Number" liveChange="onReadPos" value="{data>/SalesOrder/SalesOrderItem}" />
-    </m:HBox>
+        <m:Input id="inpSalesOrder" type="Number" liveChange="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" />
 
-  <!--  <f:SimpleForm id="SimpleFormDisplay354"
-			editable="false"
-			layout="ResponsiveGridLayout">
-				<m:Label text="{i18n>lblCustomer}" />
-				<m:Text id="nameText" text="12345 Kaufgigant Ltd" />
-				<m:Label text="{i18n>lblPurchaseOrderNum}" />
-				<m:Text  text="4530051417" />
-				<m:Label text="{i18n>lblDate}" />
-				<m:Text text="12.02.2023" />
-   	</f:SimpleForm>      -->    
+        <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
+        <m:Select id="selSalesOrderItem"
+					forceSelection="false"
+					selectedKey="{data>/SalesOrder/SalesOrderItem}"
+                    change="onReadPos"
+					items="{
+						path: '/ProductCollection',
+						sorter: { path: 'Name' }
+					}">
+					<core:ListItem id="selSalesOrderListItem" key="{SalesOrderItem}" text="{SalesOrderItem}" icon="{path:'ITPStatus', formatter:'.SDItemIcon'}"/>
+		</m:Select>
+    </m:HBox>
 
     <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
@@ -47,7 +46,7 @@
 
             <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />
             <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />
-            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSave" />
+            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" />
             <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onRelease" />
             <m:Button id="btnDownload" text="{i18n>btnDownload}" icon="sap-icon://download" press="onDownload" />
             <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" /> 
