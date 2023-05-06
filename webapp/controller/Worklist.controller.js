@@ -360,7 +360,7 @@ sap.ui.define(
               content: [
                 oTextArea
               ],
-              beginButton: [ new Button({text: "save", press: this.popoverActionPress}) ],
+              beginButton: [ new Button({ icon: "sap-icon://accept", press: this.popoverActionPress}) ],
               showHeader: false
             });
 
