@@ -267,26 +267,46 @@ sap.ui.define(
 
       onActivityChange(par1) {
         const sKey = par1.getParameter("selectedItem").getProperty("key");
-        const sPath = par1
-          .getSource()
-          .getBindingInfo("items")
-          .binding.getContext()
-          .getPath();
+        const sPath = par1.getSource().getBindingInfo("items").binding.getContext().getPath();
         const oObject = this.getView().getModel("data").getObject(sPath);
 
-        const oActScope = oObject.ActivityScope.find(
-          (el) => el.Activity === sKey
-        );
+        const oActScope = oObject.ActivityScope
+          .find((el) => el.Activity === sKey);
 
-        this.getView()
-          .getModel("data")
-          .setProperty(
-            `${sPath}/ItpProcedureDescr`,
-            oActScope.ItpProcedureDescr
-          );
-        this.getView()
-          .getModel("data")
-          .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
+        if(oActScope.IsSpecial){
+
+          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,""  );
+          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,""  );
+          this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , true  );
+
+
+        }else{
+          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,oActScope.ItpProcedureDescr  );
+          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,oActScope.AcceptCritDescr  );
+          this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , false  );
+
+        }
+        // const sKey = par1.getParameter("selectedItem").getProperty("key");
+        // const sPath = par1
+        //   .getSource()
+        //   .getBindingInfo("items")
+        //   .binding.getContext()
+        //   .getPath();
+        // const oObject = this.getView().getModel("data").getObject(sPath);
+
+        // const oActScope = oObject.ActivityScope.find(
+        //   (el) => el.Activity === sKey
+        // );
+
+        // this.getView()
+        //   .getModel("data")
+        //   .setProperty(
+        //     `${sPath}/ItpProcedureDescr`,
+        //     oActScope.ItpProcedureDescr
+        //   );
+        // this.getView()
+        //   .getModel("data")
+        //   .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
       },
 
       _enrichWithActScope(array) {
