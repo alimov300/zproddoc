@@ -59,7 +59,7 @@
         </rowSettingsTemplate>
         <columns>
             <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">            
-                <template>
+                <template templateShareable="false">
                     <m:HBox id="_IDGenHBox1HBox" class="parent2">
                     <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
                     <m:Label id="txt1" text="{data>InspItemDescr}" class="sapUiTinyMarginTop" wrapping="false" />
@@ -67,22 +67,22 @@
                 </template>
             </Column>
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
-                <template>
+                <template templateShareable="false">
                 	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange"
 				        items="{
-					        path: 'data>ActivityScope'					
+					        path: 'data>ActivityScope', templateShareable:false
 				        }" selectedKey="{data>Activity}">
 				        <core:Item id="_IDGenItem1" key="{data>Activity}" text="{data>ActivityDescr}" />
 			        </m:ComboBox>
                 </template>
             </Column>
             <Column id="cln3" label="{i18n>colProcedure}" width="12rem">
-                <template>
+                <template templateShareable="false">
                     <m:HBox id="_IDGenHBox1HBox3ab" width="100%" alignItems="Center"> 
                       <m:HBox id="_IDGenHBox1HBox31ab" width="70%" justifyContent="Start" alignItems="Center">
                         <m:Text id="txt3a" text="{
 						path: 'data>ItpProcedureDescr',
-						formatter: '.formatter.left20'
+						formatter: '.formatter.left20', templateShareable:false
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ab" width="30%" justifyContent="End" alignItems="Center">
@@ -93,12 +93,12 @@
                 </template>
             </Column>
             <Column id="cln4" label="{i18n>colAcceptCriteria}" width="12rem">
-                <template>
+                <template templateShareable="false">
                     <m:HBox id="_IDGenHBox1HBox3ac" width="100%" alignItems="Center"> 
                       <m:HBox id="_IDGenHBox1HBox31ac" width="70%" justifyContent="Start" alignItems="Center">
                         <m:Text id="txt3acc" text="{
 						path: 'data>AcceptCritDescr',
-						formatter: '.formatter.left20'
+						formatter: '.formatter.left20', templateShareable:false
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ac" width="30%" justifyContent="End" alignItems="Center">
@@ -108,72 +108,72 @@
                 </template>
             </Column>                        
             <Column id="cln5" label="{i18n>colRecord}" width="12rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1dc" selectedKey="{data>DocContent}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/DocContent'					
+					        path: 'data>/fixedVals/DocContent', templateShareable:false				
 				        }">
 				        <core:Item id="_IDGenItem1dc" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln6" label="{i18n>colFrequency}" width="12rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1fr" selectedKey="{data>Frequency}"  visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/Frequency'					
+					        path: 'data>/fixedVals/Frequency', templateShareable:false					
 				        }">
 				        <core:Item id="_IDGenItem1fr" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln7" label="{i18n>colCodeEKATO}" width="8rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1ekato" selectedKey="{data>PCodeInternal}"  visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/PCode'					
+					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
 				        <core:Item id="_IDGenItem1ekato" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln8" label="{i18n>colCodeCustomer}" width="8rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1cust" selectedKey="{data>PCodeCustomer}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/PCode'					
+					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
 				        <core:Item id="_IDGenItem1cust" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln9" label="{i18n>colCodeThirdParty}" width="8rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1tp" selectedKey="{data>PCodeThirdParty}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/PCode'					
+					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
 				        <core:Item id="_IDGenItem1tp" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln10" label="{i18n>colCodeSubVendor}" width="8rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1csv" selectedKey="{data>PCodeSubVendor}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/PCode'					
+					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
-				        <core:Item id="_IDGenItem1csv" key="{data>value}" text="{data>text}" />
+				        <core:Item key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln11" label="{i18n>colLocation}" width="8rem">
-                <template>
+                <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1loc" selectedKey="{data>Location}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/Location'					
+					        path: 'data>/fixedVals/Location', templateShareable:false					
 				        }">
-				        <core:Item id="_IDGenItem1loc" key="{data>value}" text="{data>text}" />
+				        <core:Item key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        

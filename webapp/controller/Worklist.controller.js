@@ -278,12 +278,14 @@ sap.ui.define(
           this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,""  );
           this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,""  );
           this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , true  );
+          this.getView().getModel("data").setProperty( `${sPath}/IsSpecial` , true  );
 
 
         }else{
           this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,oActScope.ItpProcedureDescr  );
           this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,oActScope.AcceptCritDescr  );
           this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , false  );
+          this.getView().getModel("data").setProperty( `${sPath}/IsSpecial` , false  );
 
         }
         // const sKey = par1.getParameter("selectedItem").getProperty("key");
