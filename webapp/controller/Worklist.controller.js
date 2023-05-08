@@ -196,7 +196,7 @@ sap.ui.define(
 
       applyFilters() {
         //switchSelectedOnly switchExtendedDelivery
-        let aFilter = [];
+        const aFilter = [];
         const oCntrl = this;
 
         if (oCntrl.getView().byId("switchSelectedOnly").getState()) {
@@ -267,26 +267,46 @@ sap.ui.define(
 
       onActivityChange(par1) {
         const sKey = par1.getParameter("selectedItem").getProperty("key");
-        const sPath = par1.getSource().getBindingInfo("items").binding.getContext().getPath();
+        const sPath = par1
+          .getSource()
+          .getBindingInfo("items")
+          .binding.getContext()
+          .getPath();
         const oObject = this.getView().getModel("data").getObject(sPath);
 
-        const oActScope = oObject.ActivityScope
-          .find((el) => el.Activity === sKey);
+        const oActScope = oObject.ActivityScope.find(
+          (el) => el.Activity === sKey
+        );
 
-        if(oActScope.IsSpecial){
-
-          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,""  );
-          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,""  );
-          this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , true  );
-          this.getView().getModel("data").setProperty( `${sPath}/IsSpecial` , true  );
-
-
-        }else{
-          this.getView().getModel("data").setProperty( `${sPath}/ItpProcedureDescr` ,oActScope.ItpProcedureDescr  );
-          this.getView().getModel("data").setProperty( `${sPath}/AcceptCritDescr` ,oActScope.AcceptCritDescr  );
-          this.getView().getModel("data").setProperty( `${sPath}/SpecialMode` , false  );
-          this.getView().getModel("data").setProperty( `${sPath}/IsSpecial` , false  );
-
+        if (oActScope.IsSpecial) {
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/ItpProcedureDescr`, "");
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCritDescr`, "");
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/SpecialMode`, true);
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/IsSpecial`, true);
+        } else {
+          this.getView()
+            .getModel("data")
+            .setProperty(
+              `${sPath}/ItpProcedureDescr`,
+              oActScope.ItpProcedureDescr
+            );
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/SpecialMode`, false);
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/IsSpecial`, false);
         }
         // const sKey = par1.getParameter("selectedItem").getProperty("key");
         // const sPath = par1
@@ -311,63 +331,74 @@ sap.ui.define(
         //   .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
       },
 
-      popoverActionPress(oEvent){       
-        var oCtx = oEvent.getSource().getBindingContext();
-				var oControl = oEvent.getSource();
-				//oView = this.getView();
+      popoverActionPress(oEvent) {
+        let oCtx = oEvent.getSource().getBindingContext();
+        let oControl = oEvent.getSource();
 
-        let oButton = oControl.getParent().getParent().getParent()._oControl._oOpenBy;
-        let sValue = oControl.getParent().getParent().getContent()[0].getValue();
-        let sPath = oControl.getParent().getParent().getParent()._oControl._oOpenBy.getBindingInfo("visible").binding.getBindings(0)[0].getContext().getPath();
-        let oModel = oControl.getParent().getParent().getParent()._oControl._oOpenBy.getModel("data");
-
-        debugger;
+        let oButton = oControl.getParent().getParent().getParent()
+          ._oControl._oOpenBy;
+        let sValue = oControl
+          .getParent()
+          .getParent()
+          .getContent()[0]
+          .getValue();
+        let sPath = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getBindingInfo("visible")
+          .binding.getBindings(0)[0]
+          .getContext()
+          .getPath();
+        let oModel = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getModel("data");
 
         oModel.setProperty(`${sPath}/ItpProcedureDescr`, sValue);
-
-
-        // this.getParent().getParent().getParent()._oControl._oOpenBy.getModel("data").getObject()
-
-        //this.mPopover.close();
-
       },
 
-      onProcedurePress(oEvent){
+      onProcedurePress(oEvent) {
         debugger;
 
-        var oCtx = oEvent.getSource().getBindingContext(),
-				oControl = oEvent.getSource();
+        let oCtx = oEvent.getSource().getBindingContext();
+        let oControl = oEvent.getSource();
 
-        const sPath = oEvent.getSource().getBindingInfo("visible").binding.getBindings()[0].getContext().getPath();
-				//oView = this.getView();
+        const sPath = oEvent
+          .getSource()
+          .getBindingInfo("visible")
+          .binding.getBindings()[0]
+          .getContext()
+          .getPath();
+        //oView = this.getView();
 
         //const sKey = oEvent.getParameter("selectedItem").getProperty("key");
         //const sPath = oEvent.getSource().getBindingInfo("items").binding.getContext().getPath();
         //const oObject = this.getView().getModel("data").getObject(sPath);
 
         const oTextArea = new sap.m.TextArea({
-          value: oEvent.getSource().getModel("data").getProperty(`${sPath}/ItpProcedureDescr`)
-        } );
-        // oTextArea.bindProperty("value",{ 
+          value: oEvent
+            .getSource()
+            .getModel("data")
+            .getProperty(`${sPath}/ItpProcedureDescr`),
+        });
+        // oTextArea.bindProperty("value",{
         //   path: `${sPath}/ItpProcedureDescr`,
         //   mode: BindingMode.TwoWay,
         //   model: "data"
         // });
 
         if (true) {
-
-            this.mPopover = new Popover({
-              content: [
-                oTextArea
-              ],
-              beginButton: [ new Button({text: "save", press: this.popoverActionPress}) ],
-              showHeader: false
-            });
-
-          }
-          this.mPopover.openBy(oEvent.getSource());
- 
-
+          this.mPopover = new Popover({
+            content: [oTextArea],
+            beginButton: [
+              new Button({ text: "save", press: this.popoverActionPress }),
+            ],
+            showHeader: false,
+          });
+        }
+        this.mPopover.openBy(oEvent.getSource());
       },
 
       _enrichWithActScope(array) {
