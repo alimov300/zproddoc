@@ -399,6 +399,19 @@ sap.ui.define(
           });
         }
         this.mPopover.openBy(oEvent.getSource());
+
+            this.mPopover = new Popover({
+              content: [
+                oTextArea
+              ],
+              beginButton: [ new Button({ icon: "sap-icon://accept", press: this.popoverActionPress}) ],
+              showHeader: false
+            });
+
+          }
+          this.mPopover.openBy(oEvent.getSource());
+ 
+
       },
 
       _enrichWithActScope(array) {
