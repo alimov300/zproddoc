@@ -122,6 +122,7 @@ sap.ui.define(
               if (!aActivityScope.some((el) => el.Plant === data.Plant)) {
                 oCtrl.loadActivityScope(data);
               }
+              oCtrl.onLoadITP();
             },
           }
         );
@@ -129,8 +130,10 @@ sap.ui.define(
 
       onSaveITP() {
         const oCtrl = this;
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
         const oITP = {
@@ -141,7 +144,13 @@ sap.ui.define(
         oServiceModel.create("/SalesOrderInfoSet", oITP, {
           method: "POST",
           success() {
-            MessageToast.show(this.getResourceBundle().getText("msgITPSaved"));
+            const oSalesItem = aSalesItems.find(
+              (el) => el.SalesOrderItem === oSalesOrder.SalesOrderItem
+            ) || { ItpState: "" };
+            if (oSalesItem.ItpState === "") oSalesItem.ItpState = "C";
+            MessageToast.show(
+              oLangModel.getResourceBundle().getText("msgITPSaved")
+            );
           },
           error() {},
         });
@@ -360,8 +369,6 @@ sap.ui.define(
       },
 
       onProcedurePress(oEvent) {
-        debugger;
-
         let oCtx = oEvent.getSource().getBindingContext();
         let oControl = oEvent.getSource();
 
@@ -371,11 +378,6 @@ sap.ui.define(
           .binding.getBindings()[0]
           .getContext()
           .getPath();
-        //oView = this.getView();
-
-        //const sKey = oEvent.getParameter("selectedItem").getProperty("key");
-        //const sPath = oEvent.getSource().getBindingInfo("items").binding.getContext().getPath();
-        //const oObject = this.getView().getModel("data").getObject(sPath);
 
         const oTextArea = new sap.m.TextArea({
           value: oEvent
@@ -383,35 +385,32 @@ sap.ui.define(
             .getModel("data")
             .getProperty(`${sPath}/ItpProcedureDescr`),
         });
-        // oTextArea.bindProperty("value",{
-        //   path: `${sPath}/ItpProcedureDescr`,
-        //   mode: BindingMode.TwoWay,
-        //   model: "data"
-        // });
 
         if (true) {
           this.mPopover = new Popover({
             content: [oTextArea],
             beginButton: [
-              new Button({ text: "save", press: this.popoverActionPress }),
+              new Button({
+                icon: "sap-icon://accept",
+                press: this.popoverActionPress,
+              }),
             ],
             showHeader: false,
           });
         }
         this.mPopover.openBy(oEvent.getSource());
 
-            this.mPopover = new Popover({
-              content: [
-                oTextArea
-              ],
-              beginButton: [ new Button({ icon: "sap-icon://accept", press: this.popoverActionPress}) ],
-              showHeader: false
-            });
-
-          }
-          this.mPopover.openBy(oEvent.getSource());
- 
-
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [
+            new Button({
+              icon: "sap-icon://accept",
+              press: this.popoverActionPress,
+            }),
+          ],
+          showHeader: false,
+        });
+        this.mPopover.openBy(oEvent.getSource());
       },
 
       _enrichWithActScope(array) {
@@ -457,7 +456,6 @@ sap.ui.define(
 
       _flatten(tree) {
         const array = [];
-        // parent = typeof parent !== "undefined" ? parent : { NodeKey: "" };
 
         tree.forEach((el) => {
           if (el.Selected) {
@@ -466,7 +464,7 @@ sap.ui.define(
               ParentNodeKey: el.ParentNodeKey,
               InspItem: el.InspItem,
               Activity: el.Activity,
-              ActivityPlnGr: el.Activity,
+              ActivityPlnGr: el.ActivityPlnGr,
               IsSpecial: el.IsSpecial,
               ItpProcedure: el.ItpProcedure,
               ItpProcedureDescr: el.ItpProcedureDescr,
@@ -485,16 +483,6 @@ sap.ui.define(
             array.push(...this._flatten(el.children));
           }
         });
-        /* if (children.length > 0) {
-          if (parent.NodeKey === "") {
-            tree = children;
-          } else {
-            parent.children = children;
-          }
-          children.forEach((child) => {
-            array.push(...this._flatten(array, child));
-          });
-        }  */
         return array;
       },
 
