@@ -15,18 +15,31 @@
 					}">
 					<core:ListItem id="selSalesOrderListItem" key="{data>SalesOrderItem}" text="{data>SalesOrderItem}" icon="{path:'data>ItpState', formatter:'.formatter.SDItemIcon'}"/>
 		</m:Select>
+
+        <m:Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblCustomer" text="{data>/HeadInfo/CustomerName}"/>
     </m:HBox>
 
     <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
                alternateRowColors="true" 
-               visibleRowCount="15"               
-               visibleRowCountMode="Fixed"
+               class="sapUiSizeCompact"           
+               visibleRowCountMode="Auto"
                rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
         <extension>
           <m:HBox id="hboxApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop" justifyContent="End">
            <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
+
+      <!--      <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />   
+            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />   -->
+            <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/ItpState} === '' }"/>
+            <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }"/>
+            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
+            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onRelease" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
+            <m:Button id="btnDownload" text="{i18n>btnDownload}" icon="sap-icon://download" press="onDownload" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
+            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" /> 
+
+            <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
 
             <m:Switch id="switchSelectedOnly" type="AcceptReject" state="false" change="onSelectOnlyToggle">
 				<m:layoutData>
@@ -41,15 +54,6 @@
 				</m:layoutData>
 			</m:Switch>
             <m:Label id="lblExtendedDelivery" text="{i18n>lblExtendedDelivery}" labelFor="applyFilters" />
-
-            <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
-
-            <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />
-            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />
-            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" />
-            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onRelease" />
-            <m:Button id="btnDownload" text="{i18n>btnDownload}" icon="sap-icon://download" press="onDownload" />
-            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" /> 
 
            </m:OverflowToolbar>
           </m:HBox>
@@ -66,6 +70,13 @@
                     </m:HBox>
                 </template>
             </Column>
+            <Column id="clnChck1" label="{i18n>colCustomerDocument}" width="9rem">
+                <template templateShareable="false">
+                    <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" visible="{data>Selectable}" />
+                </template>
+            </Column>
+                                
+
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template templateShareable="false">
                 	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange"
@@ -86,7 +97,7 @@
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ab" width="30%" justifyContent="End" alignItems="Center">
-                        <m:Button id="txt3ab" text="..." press="onProcedurePress" visible="{= ${data>IsSpecial} === true }"/>
+                        <m:Button id="btnProcedureExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }"/>
                       </m:HBox>
                    </m:HBox>  
 
@@ -102,7 +113,7 @@
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ac" width="30%" justifyContent="End" alignItems="Center">
-                        <m:Button id="txt3abc" text="..." press="onAccCriteriaPress" visible="{= ${data>IsSpecial} === true }"/>
+                        <m:Button id="btnAcceptCriteriaExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }"/>
                       </m:HBox>
                    </m:HBox>  
                 </template>

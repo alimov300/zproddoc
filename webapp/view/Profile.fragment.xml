@@ -1,0 +1,33 @@
+<!DOCTYPE project>
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:l="sap.ui.layout"
+   xmlns:core="sap.ui.core" >
+   <Dialog id="dlgProfile" title="{i18n>cptProfile}">
+      <l:VerticalLayout id="vlProfileName" class="sapUiContentPadding" width="100%">
+        <l:content>
+          <Label id="lblProfileName" text="{i18n>lblProfileName}" labelFor="fldProfileName"/>
+          <Input id="fldProfileName" class="sapUiSmallMarginBottom" value="{data>/selectedProfile}" maxLength="30" />
+        </l:content>
+        <l:content>
+                <Table id="listProfiles" width="auto" >
+                  <columns>
+                    <Column width="80%">
+                      <Text />
+                   </Column>
+                   <Column hAlign="End">
+                      <Text />
+                   </Column>
+                 </columns>
+                 <items>
+                 </items>
+              </Table>
+        </l:content>
+      </l:VerticalLayout>
+      <buttons>
+         <Button id="btnProfileLoad" type="Accept" text="{i18n>btnLoad}" press="onProfileLoad"/>
+         <Button id="btnProfileSave" text="{i18n>btnSave}" press="onProfileSave"/>
+         <Button id="btnProfileCancel" type="Reject" text="{i18n>btnCancel}"  press="onProfileCancel"/>
+      </buttons>
+   </Dialog>
+</core:FragmentDefinition>

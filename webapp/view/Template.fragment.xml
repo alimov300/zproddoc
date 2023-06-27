@@ -1,0 +1,32 @@
+<!DOCTYPE project>
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:l="sap.ui.layout"
+   xmlns:core="sap.ui.core" >
+   <Dialog id="dlgTemplate" title="{i18n>cptTemplateOrder}">
+     <HBox id="hboxRefSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
+        <Label id="lblRefSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpRefSalesOrder" />
+        <Input id="inpRefSalesOrder" type="Number" change="onReadOrder" value="{data>/RefSalesOrder/SalesOrderID}" />
+
+        <Label id="lblRefPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
+        <Select id="selRefSalesOrderItem"
+					forceSelection="false"
+					selectedKey="{data>/RefSalesOrder/SalesOrderItem}"
+                    change="onReadPos"
+					items="{
+						path: 'data>/RefSalesOrder/SalesItems',
+                        sorter: 'SalesOrderItem'
+					}">
+					<core:ListItem id="selRefSalesOrderListItem" key="{data>/RefSalesOrder>SalesOrderItem}" text="{data>/RefSalesOrder/SalesOrderItem}" icon="{path:'data>ItpState', formatter:'.formatter.SDItemIcon'}"/>
+		  </Select>
+
+        <Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblRefCustomer" text="{data>/RefSalesOrder/CustomerName}"/>  
+     </HBox>
+
+      <buttons>
+         <Button id="btnTemplateLoad" type="Accept" text="{i18n>btnLoad}" press=".onTemplateLoad"/>
+         <Button id="btnTemplateCancel" type="Reject" text="{i18n>btnCancel}"  press=".onTemplateCancel"/>
+      </buttons>
+
+   </Dialog>
+</core:FragmentDefinition>

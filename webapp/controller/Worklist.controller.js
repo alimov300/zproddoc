@@ -14,8 +14,11 @@ sap.ui.define(
    * @param {typeof sap.ui.core.mvc.Controller} Controller
    */
 
-  /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false },  SalesOrder:{}, SalesItems:[] fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
-   */
+  /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false }, HeadInfo:{}, 
+  SalesOrder:{}, SalesItems:[],
+  selectedProfile:'',
+  fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
+  */
 
   (
     Controller,
@@ -33,6 +36,7 @@ sap.ui.define(
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
+        oDataModel.setProperty("/HeadInfo", {});
         oDataModel.setProperty("/SalesOrder", {
           SalesOrderID: "",
           SalesOrderItem: "",
@@ -47,6 +51,18 @@ sap.ui.define(
           isExtendedDelivery: false,
         });
         oCtrl.getView().setModel(oDataModel, "data");
+
+        oCtrl.oDialog = sap.ui.xmlfragment(
+          this.getView().getId(),
+          "zproddoc.view.Profile"
+        );
+        oCtrl.getView().addDependent(this.oDialog);
+
+        oCtrl.oTemplateDialog = sap.ui.xmlfragment(
+          this.getView().getId(),
+          "zproddoc.view.Template"
+        );
+        oCtrl.getView().addDependent(this.oTemplateDialog);
       },
 
       onAfterRendering() {
@@ -81,7 +97,7 @@ sap.ui.define(
         });
       },
 
-      onReadOrder() {
+      onReadOrder(el) {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
@@ -95,7 +111,6 @@ sap.ui.define(
               oSalesOrder.SalesOrderID
             ),
           ],
-
           success(data) {
             const { results } = data;
             const aSalesItems = results.map((e) => ({
@@ -103,17 +118,36 @@ sap.ui.define(
               ItpState: e.ItpState,
             }));
             oDataModel.setProperty("/SalesItems", aSalesItems);
+            oDataModel.setProperty("/SalesOrder", {
+              SalesOrderID: oSalesOrder.SalesOrderID,
+              SalesOrderItem: "",
+            });
+            oDataModel.setProperty("/itp", []);
           },
         });
+
+        oServiceModel.read(
+          `/SalesOrderHeadSet(SalesOrderID='${oSalesOrder.SalesOrderID}')`,
+          {
+            method: "GET",
+            success(data) {
+              oDataModel.setProperty("/HeadInfo", data);
+            },
+            error() {
+              oDataModel.setProperty("/HeadInfo", {});
+            },
+          }
+        );
       },
 
       onReadPos() {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const sProfile = oDataModel.getProperty("/selectedProfile") || "";
         const oServiceModel = oCtrl.getView().getModel();
         oServiceModel.read(
-          `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}')`,
+          `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}',Profile='${sProfile}')`,
           {
             method: "GET",
             success(data) {
@@ -128,10 +162,89 @@ sap.ui.define(
         );
       },
 
+      onProfileSave() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
+        const sProfile = oDataModel.getProperty("/selectedProfile") || "";
+
+        if (sProfile === "") {
+          MessageToast.show(
+            oLangModel.getResourceBundle().getText("msgProfileMissing")
+          );
+          return;
+        }
+
+        oCtrl._saveITP(sProfile);
+      },
+
+      onProfileDelete(el) {
+        const oBtn = this;
+        const oSrc = el.getSource();
+
+        const oItem = oSrc
+          .getModel()
+          .getProperty(oSrc.getBindingContext().getPath());
+        const oServiceModel = oBtn.getModel();
+        oServiceModel.remove(`/ITPProfileSet(Profile='${oItem.Profile}')`);
+
+        const oLangModel = oBtn.getModel("i18n");
+        MessageToast.show(
+          oLangModel
+            .getResourceBundle()
+            .getText("msgProfileDeleted")
+            .replace("&1", oItem.Profile)
+        );
+      },
+
+      onProfileLoad() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
+        const sProfile = oDataModel.getProperty("/selectedProfile") || "";
+
+        if (sProfile === "") {
+          MessageToast.show(
+            oLangModel.getResourceBundle().getText("msgProfileMissing")
+          );
+          return;
+        }
+
+        switch (sProfile) {
+          case "ANTOS":
+            oCtrl.onLoadITP(sProfile);
+            break;
+
+          case "TEMPLATE":
+            oCtrl.onTemplate();
+            break;
+
+          default:
+            oCtrl.onLoadITP(sProfile);
+            break;
+        }
+        oCtrl.oDialog.close();
+      },
+
       onSaveITP() {
+        this._saveITP("");
+      },
+
+      _saveITP(sProfile) {
         const oCtrl = this;
         const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
         const oDataModel = oCtrl.getView().getModel("data");
+
+        if (sProfile === "ANTOS" || sProfile === "TEMPLATE") {
+          MessageToast.show(
+            oLangModel
+              .getResourceBundle()
+              .getText("msgProfileInvalid")
+              .replace("&1", sProfile)
+          );
+          return;
+        }
+
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
@@ -139,6 +252,7 @@ sap.ui.define(
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
+          Profile: sProfile || "",
           OrderToITPStruc: oCtrl._flatten(aITPStruc),
         };
         oServiceModel.create("/SalesOrderInfoSet", oITP, {
@@ -148,12 +262,35 @@ sap.ui.define(
               (el) => el.SalesOrderItem === oSalesOrder.SalesOrderItem
             ) || { ItpState: "" };
             if (oSalesItem.ItpState === "") oSalesItem.ItpState = "C";
+
             MessageToast.show(
-              oLangModel.getResourceBundle().getText("msgITPSaved")
+              oLangModel
+                .getResourceBundle()
+                .getText(sProfile === "" ? "msgITPSaved" : "msgProfileSaved")
             );
           },
           error() {},
         });
+      },
+
+      onApplyProfile() {
+        this._callProfileDialog({ edit: false });
+      },
+
+      onSaveAsProfile() {
+        this._callProfileDialog({ edit: true });
+      },
+
+      /*   setProfileValue(value) {
+        if (this.getView().byId("fldProfileName")) {
+          this.getView().byId("fldProfileName").setValue(value);
+        }
+      },  */
+
+      onProfileListPress(el) {
+        const oSrc = el.getSource();
+        const sVal = oSrc.getModel().getProperty(oSrc.getBindingContextPath());
+        this.getView().byId("fldProfileName").setValue(sVal.Profile);
       },
 
       onDownload() {
@@ -174,11 +311,12 @@ sap.ui.define(
         });
       },
 
-      onLoadITP() {
+      onLoadITP(sProfile) {
         const oCtrl = this;
         const oServiceModel = oCtrl.getView().getModel();
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+
         oServiceModel.read("/ITPStrucSet", {
           urlParameters: { $top: "9999" },
           filters: [
@@ -192,6 +330,11 @@ sap.ui.define(
               sap.ui.model.FilterOperator.EQ,
               oSalesOrder.SalesOrderItem
             ),
+            new sap.ui.model.Filter(
+              "Profile",
+              sap.ui.model.FilterOperator.EQ,
+              sProfile || ""
+            ),
           ],
           success(data) {
             const { results } = data;
@@ -204,7 +347,6 @@ sap.ui.define(
       },
 
       applyFilters() {
-        //switchSelectedOnly switchExtendedDelivery
         const aFilter = [];
         const oCntrl = this;
 
@@ -317,41 +459,16 @@ sap.ui.define(
             .getModel("data")
             .setProperty(`${sPath}/IsSpecial`, false);
         }
-        // const sKey = par1.getParameter("selectedItem").getProperty("key");
-        // const sPath = par1
-        //   .getSource()
-        //   .getBindingInfo("items")
-        //   .binding.getContext()
-        //   .getPath();
-        // const oObject = this.getView().getModel("data").getObject(sPath);
-
-        // const oActScope = oObject.ActivityScope.find(
-        //   (el) => el.Activity === sKey
-        // );
-
-        // this.getView()
-        //   .getModel("data")
-        //   .setProperty(
-        //     `${sPath}/ItpProcedureDescr`,
-        //     oActScope.ItpProcedureDescr
-        //   );
-        // this.getView()
-        //   .getModel("data")
-        //   .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
       },
 
       popoverActionPress(oEvent) {
-        let oCtx = oEvent.getSource().getBindingContext();
-        let oControl = oEvent.getSource();
-
-        let oButton = oControl.getParent().getParent().getParent()
-          ._oControl._oOpenBy;
-        let sValue = oControl
+        const oControl = oEvent.getSource();
+        const sValue = oControl
           .getParent()
           .getParent()
           .getContent()[0]
           .getValue();
-        let sPath = oControl
+        const sPath = oControl
           .getParent()
           .getParent()
           .getParent()
@@ -359,18 +476,23 @@ sap.ui.define(
           .binding.getBindings(0)[0]
           .getContext()
           .getPath();
-        let oModel = oControl
+        const oModel = oControl
           .getParent()
           .getParent()
           .getParent()
           ._oControl._oOpenBy.getModel("data");
 
-        oModel.setProperty(`${sPath}/ItpProcedureDescr`, sValue);
+        if (oControl.data("srcCell").includes("ItpProcedure")) {
+          oModel.setProperty(`${sPath}/ItpProcedureDescr`, sValue);
+        } else {
+          oModel.setProperty(`${sPath}/AcceptCritDescr`, sValue);
+        }
+        oControl.getParent().getParent().getParent().close();
       },
 
-      onProcedurePress(oEvent) {
-        let oCtx = oEvent.getSource().getBindingContext();
-        let oControl = oEvent.getSource();
+      onExtendedText(oEvent) {
+        const oCtrl = this;
+        const sSrcID = oEvent.getSource().getId();
 
         const sPath = oEvent
           .getSource()
@@ -379,38 +501,152 @@ sap.ui.define(
           .getContext()
           .getPath();
 
+        const sSrc = sSrcID.includes("btnProcedureExt")
+          ? `${sPath}/ItpProcedureDescr`
+          : `${sPath}/AcceptCritDescr`;
+
+        const oDataModel = oCtrl.getView().getModel("data");
+        oDataModel.setProperty("/activeControl", sSrc);
+
         const oTextArea = new sap.m.TextArea({
-          value: oEvent
-            .getSource()
-            .getModel("data")
-            .getProperty(`${sPath}/ItpProcedureDescr`),
+          value: oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
-        if (true) {
-          this.mPopover = new Popover({
-            content: [oTextArea],
-            beginButton: [
-              new Button({
-                icon: "sap-icon://accept",
-                press: this.popoverActionPress,
-              }),
-            ],
-            showHeader: false,
-          });
-        }
-        this.mPopover.openBy(oEvent.getSource());
+        const oBtn = new Button({
+          icon: "sap-icon://accept",
+          press: this.popoverActionPress,
+        });
+        oBtn.data("srcCell", sSrc);
 
         this.mPopover = new Popover({
           content: [oTextArea],
-          beginButton: [
-            new Button({
-              icon: "sap-icon://accept",
-              press: this.popoverActionPress,
-            }),
-          ],
+          beginButton: [oBtn],
           showHeader: false,
         });
+
         this.mPopover.openBy(oEvent.getSource());
+      },
+
+      _callProfileDialog(oParams) {
+        const oCtrl = this;
+        // const oView = this.getView();
+
+        // oCtrl.oDialog = oView.byId("dlgProfile");
+
+        /*  if (!oCtrl.oDialog) {
+          oCtrl.oDialog = sap.ui.xmlfragment(
+            oView.getId(),
+            "zprelimdoc.view.Profile",
+            oCtrl
+          );
+          oCtrl.getView().addDependent(oCtrl.oDialog);
+        }  */
+
+        // eslint-disable-next-line no-undef
+        const oButton = new sap.m.Button({
+          icon: "sap-icon://delete",
+          // eslint-disable-next-line no-template-curly-in-string
+          visible: "{= !${Fixed} }",
+          type: "Reject",
+          press: oCtrl.onProfileDelete,
+        });
+
+        const aCells = oParams.edit
+          ? [new sap.m.Label({ text: "{Profile}" })]
+          : [new sap.m.Label({ text: "{Profile}" }), oButton];
+
+        const oTemplate = new sap.m.ColumnListItem({
+          type: "Active",
+          cells: aCells,
+          press(evt) {
+            oCtrl.onProfileListPress(evt);
+          },
+        });
+
+        oCtrl.getView().byId("listProfiles").columns = [
+          new sap.m.Column(),
+          new sap.m.Column(),
+        ];
+
+        this.getView().byId("listProfiles").bindItems({
+          path: "/ITPProfileSet",
+          template: oTemplate,
+        });
+
+        if (oParams) {
+          const fnPressHandler = function (oEvent) {
+            const src = oEvent.getSource();
+
+            if (src.getId().indexOf("Cancel") >= 0) {
+              //     oCtrl.setProfileValue("");
+            }
+
+            switch (oCtrl.getView().byId("fldProfileName").getValue()) {
+              case "ANTOS":
+                oCtrl.onBeforeShowHandler();
+
+                break;
+
+              case "TEMPLATE":
+                oCtrl.onTemplate();
+
+                break;
+
+              default:
+            }
+
+            this.oDialog.getAggregation("buttons").forEach((obj) => {
+              if (obj.mEventRegistry.press) {
+                obj.mEventRegistry.press.length = 0;
+              }
+            });
+
+            oCtrl.oDialog.close();
+          };
+
+          this.getView().byId("btnProfileLoad").setVisible(!oParams.edit);
+
+          if (oParams.initial) {
+            this.getView()
+              .byId("btnProfileLoad")
+              .attachPress(fnPressHandler, this);
+          } else {
+            this.getView()
+              .byId("btnProfileLoad")
+              .attachPress(this.onProfileLoad, this);
+          }
+
+          this.getView()
+            .byId("btnProfileCancel")
+            .attachPress(fnPressHandler, this);
+
+          this.getView().byId("btnProfileSave").setVisible(oParams.edit);
+
+          this.getView()
+            .byId("btnProfileSave")
+            .attachPress(this.onProfileSave, this);
+        }
+
+        oCtrl.oDialog.open();
+      },
+
+      onTemplate() {
+        const oCtrl = this;
+        const oView = this.getView();
+        oCtrl.oTmplDialog = oView.byId("dlgTemplate");
+        if (!oCtrl.oTmplDialog) {
+          oCtrl.oTmplDialog = sap.ui.xmlfragment(
+            oView.getId(),
+            "zproddoc.view.Template",
+            oCtrl
+          );
+          oCtrl.getView().addDependent(oCtrl.oTmplDialog);
+        }
+        oCtrl.oTmplDialog.open();
+      },
+
+      onTemplateCancel() {
+        this.close();
       },
 
       _enrichWithActScope(array) {
@@ -477,7 +713,8 @@ sap.ui.define(
               PCodeThirdParty: el.PCodeThirdParty,
               PCodeSubVendor: el.PCodeSubVendor,
               Location: el.Location,
-              isExtendedDelivery: el.isExtendedDelivery,
+              IsCustomerDoc: el.IsCustomerDoc,
+              IsExtendedDelivery: el.isExtendedDelivery,
             });
           } else if (el.children) {
             array.push(...this._flatten(el.children));
