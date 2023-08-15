@@ -16,6 +16,7 @@ sap.ui.define(
 
   /* oDataModel: { globals:{ specialActivity:85 }, dispOptions:{ internalOnly:false, isExtendedDelivery:false }, HeadInfo:{}, 
   SalesOrder:{}, SalesItems:[],
+  RefSalesOrder:{}, RefSalesItems:[],
   selectedProfile:'',
   fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
   */
@@ -41,10 +42,15 @@ sap.ui.define(
           SalesOrderID: "",
           SalesOrderItem: "",
           Plant: "",
-          ItpScope: "",
+          ItpState: "",
+        });
+        oDataModel.setProperty("/RefSalesOrder", {
+          SalesOrderID: "",
+          SalesOrderItem: "",
         });
         oDataModel.setProperty("/ActivityScope", []);
         oDataModel.setProperty("/SalesItems", []);
+        oDataModel.setProperty("/RefSalesItems", []);
 
         oDataModel.setProperty("dispOptions", {
           selectedOnly: false,
@@ -58,11 +64,28 @@ sap.ui.define(
         );
         oCtrl.getView().addDependent(this.oDialog);
 
+        /* oCtrl.oTemplateDialog = oCtrl.loadFragment({
+          name: "zproddoc.view.Template",
+        });  */
+
         oCtrl.oTemplateDialog = sap.ui.xmlfragment(
           this.getView().getId(),
           "zproddoc.view.Template"
         );
         oCtrl.getView().addDependent(this.oTemplateDialog);
+
+        oCtrl
+          .getView()
+          .byId("btnTemplateLoad")
+          .attachPress(oCtrl.onTemplateLoad, oCtrl);
+        oCtrl
+          .getView()
+          .byId("btnTemplateCancel")
+          .attachPress(oCtrl.onTemplateCancel, oCtrl);
+        oCtrl
+          .getView()
+          .byId("inpRefSalesOrder")
+          .attachChange(oCtrl.onReadRefOrder, oCtrl);
       },
 
       onAfterRendering() {
@@ -97,7 +120,7 @@ sap.ui.define(
         });
       },
 
-      onReadOrder(el) {
+      onReadOrder() {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
@@ -138,6 +161,98 @@ sap.ui.define(
             },
           }
         );
+      },
+
+      onToggleRelease() {
+        const oCtrl = this;
+        const oSDItemSelect = this.getView().byId("selSalesOrderItem");
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+
+        const sPreviousState = oSalesOrder.ItpState;
+        oSalesOrder.ItpState = oSalesOrder.ItpState === "P" ? "R" : "P";
+        oCtrl._updateItpState(oSalesOrder.ItpState);
+
+        oServiceModel.update(
+          `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}',Profile='')`,
+          {
+            SalesOrderID: oSalesOrder.SalesOrderID,
+            SalesOrderItem: oSalesOrder.SalesOrderItem,
+            ItpState: oSalesOrder.ItpState,
+          },
+          {
+            method: "PUT",
+            success() {
+              oSDItemSelect.setSelectedKey(+oSalesOrder.SalesOrderItem);
+              if (sPreviousState !== "") {
+                MessageToast.show(
+                  oLangModel
+                    .getResourceBundle()
+                    .getText(
+                      sPreviousState === "P"
+                        ? "msgITPReleased"
+                        : "msgITPBackToEdit"
+                    )
+                );
+              }
+            },
+            error() {
+              //
+            },
+          }
+        );
+      },
+
+      onReadRefOrder() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/RefSalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+
+        oServiceModel.read("/SalesOrderInfoSet", {
+          method: "GET",
+          filters: [
+            new sap.ui.model.Filter(
+              "SalesOrderID",
+              sap.ui.model.FilterOperator.EQ,
+              oSalesOrder.SalesOrderID
+            ),
+          ],
+          success(data) {
+            const { results } = data;
+            const aSalesItems = results.map((e) => ({
+              SalesOrderItem: +e.SalesOrderItem,
+              ItpState: e.ItpState,
+            }));
+            oDataModel.setProperty(
+              "/RefSalesItems",
+              aSalesItems.filter((el) => el.ItpState === "C")
+            );
+            oDataModel.setProperty("/RefSalesOrder", {
+              SalesOrderID: oSalesOrder.SalesOrderID,
+              SalesOrderItem: "",
+            });
+          },
+        });
+      },
+
+      onSalesOrderSuggest(evt) {
+        const oCtrl = this;
+        const sTerm = evt.getParameter("suggestValue");
+        const aFilters = [];
+        if (sTerm) {
+          aFilters.push(
+            new sap.ui.model.Filter(
+              "SalesOrderID",
+              sap.ui.model.FilterOperator.Contains,
+              sTerm
+            )
+          );
+        }
+        evt.getSource().getBinding("suggestionItems").filter(aFilters);
+        evt.getSource().setFilterSuggests(false);
       },
 
       onReadPos() {
@@ -261,7 +376,7 @@ sap.ui.define(
             const oSalesItem = aSalesItems.find(
               (el) => el.SalesOrderItem === oSalesOrder.SalesOrderItem
             ) || { ItpState: "" };
-            if (oSalesItem.ItpState === "") oSalesItem.ItpState = "C";
+            if (oSalesItem.ItpState === "") oCtrl.onToggleRelease();
 
             MessageToast.show(
               oLangModel
@@ -281,34 +396,22 @@ sap.ui.define(
         this._callProfileDialog({ edit: true });
       },
 
-      /*   setProfileValue(value) {
-        if (this.getView().byId("fldProfileName")) {
-          this.getView().byId("fldProfileName").setValue(value);
-        }
-      },  */
-
       onProfileListPress(el) {
         const oSrc = el.getSource();
         const sVal = oSrc.getModel().getProperty(oSrc.getBindingContextPath());
         this.getView().byId("fldProfileName").setValue(sVal.Profile);
       },
 
-      onDownload() {
+      onPrintForm() {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const temp = `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}.pdf`;
         const oServiceModel = oCtrl.getView().getModel();
-        oServiceModel.read(`/ITPFormSet('${temp}')/$value`, {
-          method: "GET",
-          success(data) {
-            const fName = data.Filename;
-            const fType = data.Filetype;
-            const fContent = data.Filecontent;
-
-            File.save(fContent, fName, "pdf", fType);
-          },
-        });
+        window.open(
+          `${oServiceModel.sServiceUrl}/ITPFormSet('${temp}')/$value`,
+          "_blank"
+        );
       },
 
       onLoadITP(sProfile) {
@@ -529,18 +632,6 @@ sap.ui.define(
 
       _callProfileDialog(oParams) {
         const oCtrl = this;
-        // const oView = this.getView();
-
-        // oCtrl.oDialog = oView.byId("dlgProfile");
-
-        /*  if (!oCtrl.oDialog) {
-          oCtrl.oDialog = sap.ui.xmlfragment(
-            oView.getId(),
-            "zprelimdoc.view.Profile",
-            oCtrl
-          );
-          oCtrl.getView().addDependent(oCtrl.oDialog);
-        }  */
 
         // eslint-disable-next-line no-undef
         const oButton = new sap.m.Button({
@@ -645,8 +736,18 @@ sap.ui.define(
         oCtrl.oTmplDialog.open();
       },
 
+      onTemplateLoad() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oRefSalesOrder = oDataModel.getProperty("/RefSalesOrder");
+        oCtrl.onLoadITP(
+          `TEMPLATE/${oRefSalesOrder.SalesOrderID}/${oRefSalesOrder.SalesOrderItem}`
+        );
+        this.oTemplateDialog.close();
+      },
+
       onTemplateCancel() {
-        this.close();
+        this.oTemplateDialog.close();
       },
 
       _enrichWithActScope(array) {
@@ -688,6 +789,24 @@ sap.ui.define(
           });
         }
         return tree;
+      },
+
+      _updateItpState(state) {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+
+        oSalesOrder.ItpState = state;
+        oDataModel.setProperty("/SalesOrder", oSalesOrder);
+
+        const aSalesItems = oDataModel.getProperty("/SalesItems");
+        const oSalesItem = aSalesItems.find(
+          (el) => el.SalesOrderItem === +oSalesOrder.SalesOrderItem
+        );
+        if (oSalesItem) {
+          oSalesItem.ItpState = state;
+          oDataModel.setProperty("/SalesItems", aSalesItems);
+        }
       },
 
       _flatten(tree) {

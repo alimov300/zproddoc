@@ -6,7 +6,12 @@
    <Dialog id="dlgTemplate" title="{i18n>cptTemplateOrder}">
      <HBox id="hboxRefSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <Label id="lblRefSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpRefSalesOrder" />
-        <Input id="inpRefSalesOrder" type="Number" change="onReadOrder" value="{data>/RefSalesOrder/SalesOrderID}" />
+        <Input id="inpRefSalesOrder" change="onReadRefOrder" value="{data>/RefSalesOrder/SalesOrderID}" 
+                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest="onSalesOrderSuggest" suggestionItems="{ path: '/SalesOrderHeadSet' }" >
+	      <suggestionItems>
+            <core:ListItem text="{SalesOrderID}" additionalText="{CustomerRef}"/>
+	      </suggestionItems>
+        </Input>
 
         <Label id="lblRefPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
         <Select id="selRefSalesOrderItem"
@@ -14,18 +19,18 @@
 					selectedKey="{data>/RefSalesOrder/SalesOrderItem}"
                     change="onReadPos"
 					items="{
-						path: 'data>/RefSalesOrder/SalesItems',
+						path: 'data>/RefSalesItems',
                         sorter: 'SalesOrderItem'
 					}">
-					<core:ListItem id="selRefSalesOrderListItem" key="{data>/RefSalesOrder>SalesOrderItem}" text="{data>/RefSalesOrder/SalesOrderItem}" icon="{path:'data>ItpState', formatter:'.formatter.SDItemIcon'}"/>
+					<core:ListItem id="selRefSalesOrderListItem" key="{data>SalesOrderItem}" text="{data>SalesOrderItem}"/>
 		  </Select>
 
         <Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblRefCustomer" text="{data>/RefSalesOrder/CustomerName}"/>  
      </HBox>
 
       <buttons>
-         <Button id="btnTemplateLoad" type="Accept" text="{i18n>btnLoad}" press=".onTemplateLoad"/>
-         <Button id="btnTemplateCancel" type="Reject" text="{i18n>btnCancel}"  press=".onTemplateCancel"/>
+         <Button id="btnTemplateLoad" type="Accept" text="{i18n>btnLoad}" />
+         <Button id="btnTemplateCancel" type="Reject" text="{i18n>btnCancel}" />
       </buttons>
 
    </Dialog>

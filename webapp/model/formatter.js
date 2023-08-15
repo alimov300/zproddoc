@@ -21,7 +21,7 @@ sap.ui.define([], () => {
       if (!sState) return "";
       // eslint-disable-next-line default-case
       switch (sState) {
-        case "C":
+        case "P":
           return "sap-icon://instance";
         case "R":
           return "sap-icon://locked";

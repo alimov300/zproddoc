@@ -2,7 +2,12 @@
          displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table" xmlns:core="sap.ui.core">
     <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
-        <m:Input id="inpSalesOrder" type="Number" change="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" />
+        <m:Input id="inpSalesOrder" change="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" 
+                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest="onSalesOrderSuggest" suggestionItems="{ path: '/SalesOrderHeadSet' }" >
+	      <m:suggestionItems>
+            <core:ListItem width="400px" text="{SalesOrderID}" additionalText="{CustomerName}"/>
+	      </m:suggestionItems>
+        </m:Input>
 
         <m:Label id="lblPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
         <m:Select id="selSalesOrderItem"
@@ -33,11 +38,12 @@
       <!--      <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />   
             <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />   -->
             <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/ItpState} === '' }"/>
-            <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }"/>
+            <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/ItpState} !== '' }"/>
+            <m:Button id="btnPrintForm" text="{i18n>btnPrintForm}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/ItpState} !== '' }" />
+            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/ItpState} !== '' }" /> 
+            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'P' }" />
+            <m:Button id="btnBackToEdit" text="{i18n>btnBackToEdit}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'R' }" />
             <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
-            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onRelease" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
-            <m:Button id="btnDownload" text="{i18n>btnDownload}" icon="sap-icon://download" press="onDownload" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
-            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" /> 
 
             <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
 
@@ -122,7 +128,7 @@
                 <template templateShareable="false">
                     <m:ComboBox id="_IDGenComboBox1dc" selectedKey="{data>DocContent}" visible="{= ${data>Selectable} ? true : false }" 
 				        items="{
-					        path: 'data>/fixedVals/DocContent', templateShareable:false				
+					        path: 'data>/fixedVals/DocContent', templateShareable:false, length : '2000'				
 				        }">
 				        <core:Item id="_IDGenItem1dc" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
