@@ -18,7 +18,9 @@ sap.ui.define(
   SalesOrder:{}, SalesItems:[],
   RefSalesOrder:{}, RefSalesItems:[],
   selectedProfile:'',
-  fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree] }
+  fixedVals:{ ITPProcedure:[]... }, ActivityScope:[], itp:[tree],
+  uiState:{ SalesRelevantOnly: true, SalesRelevantFilter[] } 
+}
   */
 
   (
@@ -37,6 +39,10 @@ sap.ui.define(
       onInit() {
         const oCtrl = this;
         const oDataModel = new JSONModel({});
+        oDataModel.setProperty("/uiState", {
+          SalesRelevantOnly: false,
+          SalesRelevantFilter: [],
+        });
         oDataModel.setProperty("/HeadInfo", {});
         oDataModel.setProperty("/SalesOrder", {
           SalesOrderID: "",
@@ -139,6 +145,7 @@ sap.ui.define(
             const aSalesItems = results.map((e) => ({
               SalesOrderItem: +e.SalesOrderItem,
               ItpState: e.ItpState,
+              SalesRelevantOnly: e.SalesRelevantOnly,
             }));
             oDataModel.setProperty("/SalesItems", aSalesItems);
             oDataModel.setProperty("/SalesOrder", {
@@ -205,6 +212,23 @@ sap.ui.define(
         );
       },
 
+      onSaveToDoc() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+        oServiceModel.callFunction("/ITPSaveToDoc", {
+          method: "GET",
+          urlParameters: {
+            SalesOrderID: oSalesOrder.SalesOrderID,
+            SalesOrderItem: oSalesOrder.SalesOrderItem,
+          },
+          success(data) {
+            const { results } = data;
+          },
+        });
+      },
+
       onReadRefOrder() {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
@@ -260,21 +284,32 @@ sap.ui.define(
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const sProfile = oDataModel.getProperty("/selectedProfile") || "";
-        const oServiceModel = oCtrl.getView().getModel();
-        oServiceModel.read(
-          `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}',Profile='${sProfile}')`,
-          {
-            method: "GET",
-            success(data) {
-              oDataModel.setProperty("/SalesOrder", data);
-              const aActivityScope = oDataModel.getProperty("/ActivityScope");
-              if (!aActivityScope.some((el) => el.Plant === data.Plant)) {
-                oCtrl.loadActivityScope(data);
-              }
-              oCtrl.onLoadITP();
-            },
-          }
-        );
+
+        const oSelectedItem = oDataModel
+          .getProperty("/SalesItems")
+          .find((el) => el.SalesOrderItem === +oSalesOrder.SalesOrderItem) || {
+          ItpState: "",
+        };
+
+        if (oSelectedItem.ItpState === "X") {
+          oDataModel.setProperty("/itp", {});
+        } else {
+          const oServiceModel = oCtrl.getView().getModel();
+          oServiceModel.read(
+            `/SalesOrderInfoSet(SalesOrderID='${oSalesOrder.SalesOrderID}',SalesOrderItem='${oSalesOrder.SalesOrderItem}',Profile='${sProfile}')`, //,salesRelevantOnly='${oUIState.SalesRelevantOnly}'
+            {
+              method: "GET",
+              success(data) {
+                oDataModel.setProperty("/SalesOrder", data);
+                const aActivityScope = oDataModel.getProperty("/ActivityScope");
+                if (!aActivityScope.some((el) => el.Plant === data.Plant)) {
+                  oCtrl.loadActivityScope(data);
+                }
+                oCtrl.onLoadITP();
+              },
+            }
+          );
+        }
       },
 
       onProfileSave() {
@@ -374,9 +409,9 @@ sap.ui.define(
           method: "POST",
           success() {
             const oSalesItem = aSalesItems.find(
-              (el) => el.SalesOrderItem === oSalesOrder.SalesOrderItem
+              (el) => el.SalesOrderItem === +oSalesOrder.SalesOrderItem
             ) || { ItpState: "" };
-            if (oSalesItem.ItpState === "") oCtrl.onToggleRelease();
+            if (oSalesItem.ItpState === "") oCtrl.onToggleRelease(); //oCtrl._updateItpState("P");??
 
             MessageToast.show(
               oLangModel
@@ -402,14 +437,16 @@ sap.ui.define(
         this.getView().byId("fldProfileName").setValue(sVal.Profile);
       },
 
-      onPrintForm() {
+      onPrintForm(el) {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
-        const temp = `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}.pdf`;
+        const sFile = el.oSource.getId().includes("btnPrintFormCust")
+          ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`
+          : `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`;
         const oServiceModel = oCtrl.getView().getModel();
         window.open(
-          `${oServiceModel.sServiceUrl}/ITPFormSet('${temp}')/$value`,
+          `${oServiceModel.sServiceUrl}/ITPFormSet('${sFile}.pdf')/$value`,
           "_blank"
         );
       },
@@ -466,6 +503,24 @@ sap.ui.define(
         this.byId("treeInspPlan")
           .getBinding()
           .filter(new Filter(aFilter, true));
+      },
+
+      onSalesRelevantToggle(evt) {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oUIState = oDataModel.getProperty("/uiState");
+        if (oUIState.SalesRelevantOnly) {
+          oUIState.SalesRelevantFilter.push(
+            new Filter("SalesRelevantOnly", FilterOperator.EQ, true)
+          );
+        } else {
+          oUIState.SalesRelevantFilter = [];
+        }
+        oDataModel.setProperty("/uiState", oUIState);
+
+        const oSelect = oCtrl.getView().byId("selSalesOrderItem");
+        const oBinding = oSelect.getBinding("items");
+        oBinding.filter(oUIState.SalesRelevantFilter);
       },
 
       onSelectOnlyToggle(evt) {
@@ -813,29 +868,31 @@ sap.ui.define(
         const array = [];
 
         tree.forEach((el) => {
-          if (el.Selected) {
-            array.push({
-              NodeKey: el.NodeKey,
-              ParentNodeKey: el.ParentNodeKey,
-              InspItem: el.InspItem,
-              Activity: el.Activity,
-              ActivityPlnGr: el.ActivityPlnGr,
-              IsSpecial: el.IsSpecial,
-              ItpProcedure: el.ItpProcedure,
-              ItpProcedureDescr: el.ItpProcedureDescr,
-              AcceptCrit: el.AcceptCrit,
-              AcceptCritDescr: el.AcceptCritDescr,
-              DocContent: el.DocContent,
-              Frequency: el.Frequency,
-              PCodeInternal: el.PCodeInternal,
-              PCodeCustomer: el.PCodeCustomer,
-              PCodeThirdParty: el.PCodeThirdParty,
-              PCodeSubVendor: el.PCodeSubVendor,
-              Location: el.Location,
-              IsCustomerDoc: el.IsCustomerDoc,
-              IsExtendedDelivery: el.isExtendedDelivery,
-            });
-          } else if (el.children) {
+          //if (el.Selected) {
+          array.push({
+            Selected: el.Selected,
+            NodeKey: el.NodeKey,
+            ParentNodeKey: el.ParentNodeKey,
+            InspItem: el.InspItem,
+            Activity: el.Activity,
+            ActivityPlnGr: el.ActivityPlnGr,
+            IsSpecial: el.IsSpecial,
+            ItpProcedure: el.ItpProcedure,
+            ItpProcedureDescr: el.ItpProcedureDescr,
+            AcceptCrit: el.AcceptCrit,
+            AcceptCritDescr: el.AcceptCritDescr,
+            DocContent: el.DocContent,
+            Frequency: el.Frequency,
+            PCodeInternal: el.PCodeInternal,
+            PCodeCustomer: el.PCodeCustomer,
+            PCodeThirdParty: el.PCodeThirdParty,
+            PCodeSubVendor: el.PCodeSubVendor,
+            Location: el.Location,
+            IsCustomerDoc: el.IsCustomerDoc,
+            IsExtendedDelivery: el.isExtendedDelivery,
+          });
+          // }
+          if (el.children) {
             array.push(...this._flatten(el.children));
           }
         });

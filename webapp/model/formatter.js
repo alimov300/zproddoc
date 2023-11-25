@@ -25,6 +25,8 @@ sap.ui.define([], () => {
           return "sap-icon://instance";
         case "R":
           return "sap-icon://locked";
+        case "X":
+          return "sap-icon://cancel";
       }
       return "";
     },

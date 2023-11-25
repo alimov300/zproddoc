@@ -16,11 +16,21 @@
                     change="onReadPos"
 					items="{
 						path: 'data>/SalesItems',
-                        sorter: 'SalesOrderItem'
+                        sorter: 'SalesOrderItem',
+                        filters: 'data>/uiState/SalesRelevantFilter'
 					}">
 					<core:ListItem id="selSalesOrderListItem" key="{data>SalesOrderItem}" text="{data>SalesOrderItem}" icon="{path:'data>ItpState', formatter:'.formatter.SDItemIcon'}"/>
 		</m:Select>
 
+        <m:HBox id="hboxPosFilter" class="sapUiSmallMarginBegin sapUiLargeMarginEnd" justifyContent="Start" >
+          <m:Switch id="switchSalesRelevantOnly" type="AcceptReject" state="{data>/uiState/SalesRelevantOnly}" change="onSalesRelevantToggle">
+			<m:layoutData>
+				<m:FlexItemData id="fidSalesRelevantOnly" growFactor="1"/>
+			</m:layoutData>
+		  </m:Switch>
+          <m:Label class="sapUiTinyMarginTop" id="lblSalesRelevantOnly" text="{i18n>lblSalesRelevantOnly}" labelFor="switchSalesRelevantOnly" />
+        </m:HBox>
+        
         <m:Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblCustomer" text="{data>/HeadInfo/CustomerName}"/>
     </m:HBox>
 
@@ -37,13 +47,14 @@
 
       <!--      <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />   
             <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />   -->
-            <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/ItpState} === '' }"/>
-            <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/ItpState} !== '' }"/>
-            <m:Button id="btnPrintForm" text="{i18n>btnPrintForm}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/ItpState} !== '' }" />
-            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/ItpState} !== '' }" /> 
+            <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} === '' }"/>
+            <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }"/>
+            <m:Button id="btnPrintForm" text="{i18n>btnPrintForm}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" />
+            <m:Button id="btnPrintFormCust" text="{i18n>btnPrintFormCust}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" />
+            <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" /> 
             <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'P' }" />
             <m:Button id="btnBackToEdit" text="{i18n>btnBackToEdit}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'R' }" />
-            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' }" />
+            <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== 'R' }" />
 
             <m:ToolbarSpacer id="tbsApplToolbar" width="2rem"/>
 
@@ -71,21 +82,21 @@
             <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">            
                 <template templateShareable="false">
                     <m:HBox id="_IDGenHBox1HBox" class="parent2">
-                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" />
+                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
                     <m:Label id="txt1" text="{data>InspItemDescr}" class="sapUiTinyMarginTop" wrapping="false" />
                     </m:HBox>
                 </template>
             </Column>
             <Column id="clnChck1" label="{i18n>colCustomerDocument}" width="9rem">
                 <template templateShareable="false">
-                    <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" visible="{data>Selectable}" />
+                    <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" visible="{data>Selectable}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
                 </template>
             </Column>
                                 
 
             <Column id="cln2" label="{i18n>colActivity}" width="9rem">
                 <template templateShareable="false">
-                	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange"
+                	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>ActivityScope', templateShareable:false
 				        }" selectedKey="{data>Activity}">
@@ -103,7 +114,7 @@
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ab" width="30%" justifyContent="End" alignItems="Center">
-                        <m:Button id="btnProcedureExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }"/>
+                        <m:Button id="btnProcedureExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }" enabled="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
                       </m:HBox>
                    </m:HBox>  
 
@@ -119,24 +130,25 @@
 					        }" wrapping="false" />
                       </m:HBox>
                       <m:HBox id="_IDGenHBox1HBox32ac" width="30%" justifyContent="End" alignItems="Center">
-                        <m:Button id="btnAcceptCriteriaExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }"/>
+                        <m:Button id="btnAcceptCriteriaExt" text="..." press="onExtendedText" visible="{= ${data>IsSpecial} === true }" enabled="{= ${data>/SalesOrder/ItpState} !== 'R' }"/>
                       </m:HBox>
                    </m:HBox>  
                 </template>
             </Column>                        
-            <Column id="cln5" label="{i18n>colRecord}" width="12rem">
+            <Column id="cln5" label="{i18n>colRecord}" width="12rem" >
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1dc" selectedKey="{data>DocContent}" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1dc" selectedKey="{data>DocContent}" editable="false" visible="{= ${data>Selectable} ? true : false }"  
 				        items="{
-					        path: 'data>/fixedVals/DocContent', templateShareable:false, length : '2000'				
+					        path: 'data>/fixedVals/DocContent', templateShareable:false, length : '2000' 				
 				        }">
+                        <!--  -->
 				        <core:Item id="_IDGenItem1dc" key="{data>value}" text="{data>text}" />
 			        </m:ComboBox>
                 </template>
             </Column>                        
             <Column id="cln6" label="{i18n>colFrequency}" width="12rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1fr" selectedKey="{data>Frequency}"  visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1fr" selectedKey="{data>Frequency}"  visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/Frequency', templateShareable:false					
 				        }">
@@ -146,7 +158,7 @@
             </Column>                        
             <Column id="cln7" label="{i18n>colCodeEKATO}" width="8rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1ekato" selectedKey="{data>PCodeInternal}"  visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1ekato" selectedKey="{data>PCodeInternal}"  visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
@@ -156,7 +168,7 @@
             </Column>                        
             <Column id="cln8" label="{i18n>colCodeCustomer}" width="8rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1cust" selectedKey="{data>PCodeCustomer}" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1cust" selectedKey="{data>PCodeCustomer}" visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
@@ -166,7 +178,7 @@
             </Column>                        
             <Column id="cln9" label="{i18n>colCodeThirdParty}" width="8rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1tp" selectedKey="{data>PCodeThirdParty}" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1tp" selectedKey="{data>PCodeThirdParty}" visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
@@ -176,7 +188,7 @@
             </Column>                        
             <Column id="cln10" label="{i18n>colCodeSubVendor}" width="8rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1csv" selectedKey="{data>PCodeSubVendor}" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1csv" selectedKey="{data>PCodeSubVendor}" visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/PCode', templateShareable:false					
 				        }">
@@ -186,7 +198,7 @@
             </Column>                        
             <Column id="cln11" label="{i18n>colLocation}" width="8rem">
                 <template templateShareable="false">
-                    <m:ComboBox id="_IDGenComboBox1loc" selectedKey="{data>Location}" visible="{= ${data>Selectable} ? true : false }" 
+                    <m:ComboBox id="_IDGenComboBox1loc" selectedKey="{data>Location}" visible="{= ${data>Selectable} ? true : false }" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
 					        path: 'data>/fixedVals/Location', templateShareable:false					
 				        }">
