@@ -47,7 +47,7 @@
 
       <!--      <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />   
             <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />   -->
-            <m:Button id="btnGenRemark" text="{i18n>btnGenRemark}" icon="sap-icon://approvals" press="onApplyGenRemark" />
+            <m:Button id="btnGenRemark" text="{i18n>btnGenRemark}" icon="sap-icon://approvals" press="onApplyGenRemark" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== 'R' }"/>
             <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} === '' }"/>
             <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }"/>
             <m:Button id="btnPrintForm" text="{i18n>btnPrintForm}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" />
