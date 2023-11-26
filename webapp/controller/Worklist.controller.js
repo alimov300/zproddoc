@@ -182,7 +182,7 @@ sap.ui.define(
         const sComments = oDataModel.getProperty("/ReleaseComment");
 
         const oTextArea = new sap.m.Input({
-          fieldWidth: "127rem",
+          width: "127rem",
           value: sComments, //oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
@@ -733,8 +733,8 @@ sap.ui.define(
         const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
 
         const oTextArea = new sap.m.TextArea({
-          rows: "3",
-          cols: "100",
+          rows: 3,
+          cols: 100,
           value: sGeneralRemarks, //oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
