@@ -93,9 +93,9 @@ sap.ui.define(
           .byId("inpRefSalesOrder")
           .attachChange(oCtrl.onReadRefOrder, oCtrl);
 
-          const oBus = sap.ui.getCore().getEventBus();
+        const oBus = sap.ui.getCore().getEventBus();
 
-          oBus.subscribe("release", "itp", this.onToggleRelease, this);
+        oBus.subscribe("release", "itp", this.onToggleRelease, this);
       },
 
       onAfterRendering() {
@@ -174,16 +174,16 @@ sap.ui.define(
         );
       },
 
-      _onCommentToggleRelease(oEvent){
+      _onCommentToggleRelease(oEvent) {
         debugger;
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const sComments = oDataModel.getProperty("/ReleaseComment");
-        
 
-        const oTextArea = new sap.m.Input({ fieldWidth: "127rem"
-          value: sComments //oEvent.getSource().getModel("data").getProperty(sSrc),
+        const oTextArea = new sap.m.Input({
+          fieldWidth: "127rem",
+          value: sComments, //oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
         const oBtn = new Button({
@@ -409,12 +409,9 @@ sap.ui.define(
 
       onSaveITP(oEvent) {
         this._saveITP("");
-
-        
-
       },
 
-      popoverSaveReleasePress(oEvent){
+      popoverSaveReleasePress(oEvent) {
         debugger;
 
         const oControl = oEvent.getSource();
@@ -444,15 +441,11 @@ sap.ui.define(
         //  .getParent()
         //  ._oControl._oOpenBy._saveITP("");
 
-
-          const bus = sap.ui.getCore().getEventBus();
-          bus.publish("release", "itp", {
-                    id: "onRelease",
-                    data: {
-                    },
-          });
-
-
+        const bus = sap.ui.getCore().getEventBus();
+        bus.publish("release", "itp", {
+          id: "onRelease",
+          data: {},
+        });
       },
 
       //_onSaveITP(oData){
@@ -487,7 +480,7 @@ sap.ui.define(
           Profile: sProfile || "",
           OrderToITPStruc: oCtrl._flatten(aITPStruc),
           GeneralRemarks: sGeneralRemarks,
-          ReleaseComment: sReleaseComment
+          ReleaseComment: sReleaseComment,
         };
         oServiceModel.create("/SalesOrderInfoSet", oITP, {
           method: "POST",
@@ -738,10 +731,11 @@ sap.ui.define(
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
-        
 
-        const oTextArea = new sap.m.TextArea({ rows: "3", cols: "100",
-          value: sGeneralRemarks //oEvent.getSource().getModel("data").getProperty(sSrc),
+        const oTextArea = new sap.m.TextArea({
+          rows: "3",
+          cols: "100",
+          value: sGeneralRemarks, //oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
         const oBtn = new Button({
@@ -759,7 +753,7 @@ sap.ui.define(
         this.mPopover.openBy(oEvent.getSource());
       },
 
-      popoverGerRemarkPress(oEvent){
+      popoverGerRemarkPress(oEvent) {
         debugger;
 
         const oControl = oEvent.getSource();
