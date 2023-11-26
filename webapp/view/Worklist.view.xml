@@ -34,6 +34,11 @@
         <m:Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblCustomer" text="{data>/HeadInfo/CustomerName}"/>
     </m:HBox>
 
+    <m:HBox id="hboxGenRemarkBox" class="sapUiSmallMarginBegin sapUiLargeMarginEnd" justifyContent="Start" >
+    <m:Button id="btnGenRemark" text="{i18n>btnGenRemark}" icon="sap-icon://approvals" press="onApplyGenRemark" 
+        />
+    </m:HBox>
+
     <TreeTable id="treeInspPlan" selectionMode="None"
                enableColumnReordering="false"
                alternateRowColors="true" 

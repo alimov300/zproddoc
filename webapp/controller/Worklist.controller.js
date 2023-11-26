@@ -92,6 +92,10 @@ sap.ui.define(
           .getView()
           .byId("inpRefSalesOrder")
           .attachChange(oCtrl.onReadRefOrder, oCtrl);
+
+          const oBus = sap.ui.getCore().getEventBus();
+
+          oBus.subscribe("save", "itp", this._onSaveITP, this);
       },
 
       onAfterRendering() {
@@ -376,7 +380,77 @@ sap.ui.define(
         oCtrl.oDialog.close();
       },
 
-      onSaveITP() {
+      onSaveITP(oEvent) {
+        //this._saveITP("");
+
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const sComments = oDataModel.getProperty("/ReleaseComment");
+        
+
+        const oTextArea = new sap.m.Input({
+          value: sComments //oEvent.getSource().getModel("data").getProperty(sSrc),
+        });
+
+        const oBtn = new Button({
+          icon: "sap-icon://accept",
+          press: this.popoverSaveItpPress,
+        });
+        //oBtn.data("srcCell", sSrc);
+
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [oBtn],
+          showHeader: false,
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
+
+      },
+
+      popoverSaveItpPress(oEvent){
+        debugger;
+
+        const oControl = oEvent.getSource();
+
+        const sValue = oControl
+          .getParent()
+          .getParent()
+          .getContent()[0]
+          .getValue();
+
+        const oCtrl = this;
+        //const oDataModel = oCtrl.getView().getModel("data");
+
+        const oDataModel = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getModel("data");
+
+        oDataModel.setProperty("/ReleaseComment", sValue);
+
+        oControl.getParent().getParent().getParent().close();
+
+        //oControl
+        //  .getParent()
+        //  .getParent()
+        //  .getParent()
+        //  ._oControl._oOpenBy._saveITP("");
+
+
+          const bus = sap.ui.getCore().getEventBus();
+          bus.publish("save", "itp", {
+                    id: "onSave",
+                    data: {
+                    },
+          });
+
+
+      },
+
+      _onSaveITP(oData){
+        debugger;
         this._saveITP("");
       },
 
@@ -399,11 +473,15 @@ sap.ui.define(
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
+        const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
+        const sReleaseComment = oDataModel.getProperty("/ReleaseComment");
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
           Profile: sProfile || "",
           OrderToITPStruc: oCtrl._flatten(aITPStruc),
+          GeneralRemarks: sGeneralRemarks,
+          ReleaseComment: sReleaseComment
         };
         oServiceModel.create("/SalesOrderInfoSet", oITP, {
           method: "POST",
@@ -645,6 +723,58 @@ sap.ui.define(
         } else {
           oModel.setProperty(`${sPath}/AcceptCritDescr`, sValue);
         }
+        oControl.getParent().getParent().getParent().close();
+      },
+
+      onApplyGenRemark(oEvent) {
+        debugger;
+
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
+        
+
+        const oTextArea = new sap.m.TextArea({
+          value: sGeneralRemarks //oEvent.getSource().getModel("data").getProperty(sSrc),
+        });
+
+        const oBtn = new Button({
+          icon: "sap-icon://accept",
+          press: this.popoverGerRemarkPress,
+        });
+        //oBtn.data("srcCell", sSrc);
+
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [oBtn],
+          showHeader: false,
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
+      },
+
+      popoverGerRemarkPress(oEvent){
+        debugger;
+
+        const oControl = oEvent.getSource();
+
+        const sValue = oControl
+          .getParent()
+          .getParent()
+          .getContent()[0]
+          .getValue();
+
+        const oCtrl = this;
+        //const oDataModel = oCtrl.getView().getModel("data");
+
+        const oDataModel = oControl
+          .getParent()
+          .getParent()
+          .getParent()
+          ._oControl._oOpenBy.getModel("data");
+
+        oDataModel.setProperty("/GeneralRemarks", sValue);
+
         oControl.getParent().getParent().getParent().close();
       },
 
