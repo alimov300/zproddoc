@@ -179,7 +179,7 @@ sap.ui.define(
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
-        const sComments = oDataModel.getProperty("/ReleaseComment");
+        const sComments = oDataModel.getProperty("/SalesOrder/ReleaseComment");
 
         const oTextArea = new sap.m.Input({
           width: "127rem",
@@ -472,8 +472,8 @@ sap.ui.define(
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
-        const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
-        const sReleaseComment = oDataModel.getProperty("/ReleaseComment");
+        const sGeneralRemarks = oDataModel.getProperty("/SalesOrder/GeneralRemarks");
+        const sReleaseComment = oDataModel.getProperty("/SalesOrder/ReleaseComment");
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
@@ -730,7 +730,7 @@ sap.ui.define(
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
-        const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
+        const sGeneralRemarks = oDataModel.getProperty("/SalesOrder/GeneralRemarks");
 
         const oTextArea = new sap.m.TextArea({
           rows: 3,
@@ -773,7 +773,7 @@ sap.ui.define(
           .getParent()
           ._oControl._oOpenBy.getModel("data");
 
-        oDataModel.setProperty("/GeneralRemarks", sValue);
+        oDataModel.setProperty("/SalesOrder/GeneralRemarks", sValue);
 
         oControl.getParent().getParent().getParent().close();
       },
