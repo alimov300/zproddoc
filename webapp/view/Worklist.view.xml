@@ -57,7 +57,7 @@
             <m:Button id="btnPrintForm" text="{i18n>btnPrintForm}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" />
             <m:Button id="btnPrintFormCust" text="{i18n>btnPrintFormCust}" icon="sap-icon://download" press="onPrintForm" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" />
             <m:Button id="btnSaveToDoc" text="{i18n>btnSaveToDoc}" icon="sap-icon://add-process" press="onSaveToDoc" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }" /> 
-            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'P' }" />
+            <m:Button id="btnRelease" text="{i18n>btnRelease}" icon="sap-icon://begin" press="_onCommentToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'P' }" />
             <m:Button id="btnBackToEdit" text="{i18n>btnBackToEdit}" icon="sap-icon://begin" press="onToggleRelease" visible="{= ${data>/SalesOrder/ItpState} === 'R' }" />
             <m:Button id="btnSave" text="{i18n>btnSave}" icon="sap-icon://save" press="onSaveITP" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== 'R' }" />
 

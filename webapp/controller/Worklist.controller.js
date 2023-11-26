@@ -95,7 +95,7 @@ sap.ui.define(
 
           const oBus = sap.ui.getCore().getEventBus();
 
-          oBus.subscribe("save", "itp", this._onSaveITP, this);
+          oBus.subscribe("release", "itp", this.onToggleRelease, this);
       },
 
       onAfterRendering() {
@@ -172,6 +172,33 @@ sap.ui.define(
             },
           }
         );
+      },
+
+      _onCommentToggleRelease(oEvent){
+        debugger;
+
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const sComments = oDataModel.getProperty("/ReleaseComment");
+        
+
+        const oTextArea = new sap.m.Input({ fieldWidth: "127rem"
+          value: sComments //oEvent.getSource().getModel("data").getProperty(sSrc),
+        });
+
+        const oBtn = new Button({
+          icon: "sap-icon://accept",
+          press: this.popoverSaveReleasePress,
+        });
+        //oBtn.data("srcCell", sSrc);
+
+        this.mPopover = new Popover({
+          content: [oTextArea],
+          beginButton: [oBtn],
+          showHeader: false,
+        });
+
+        this.mPopover.openBy(oEvent.getSource());
       },
 
       onToggleRelease() {
@@ -381,34 +408,13 @@ sap.ui.define(
       },
 
       onSaveITP(oEvent) {
-        //this._saveITP("");
+        this._saveITP("");
 
-        const oCtrl = this;
-        const oDataModel = oCtrl.getView().getModel("data");
-        const sComments = oDataModel.getProperty("/ReleaseComment");
         
-
-        const oTextArea = new sap.m.Input({
-          value: sComments //oEvent.getSource().getModel("data").getProperty(sSrc),
-        });
-
-        const oBtn = new Button({
-          icon: "sap-icon://accept",
-          press: this.popoverSaveItpPress,
-        });
-        //oBtn.data("srcCell", sSrc);
-
-        this.mPopover = new Popover({
-          content: [oTextArea],
-          beginButton: [oBtn],
-          showHeader: false,
-        });
-
-        this.mPopover.openBy(oEvent.getSource());
 
       },
 
-      popoverSaveItpPress(oEvent){
+      popoverSaveReleasePress(oEvent){
         debugger;
 
         const oControl = oEvent.getSource();
@@ -440,8 +446,8 @@ sap.ui.define(
 
 
           const bus = sap.ui.getCore().getEventBus();
-          bus.publish("save", "itp", {
-                    id: "onSave",
+          bus.publish("release", "itp", {
+                    id: "onRelease",
                     data: {
                     },
           });
@@ -449,10 +455,10 @@ sap.ui.define(
 
       },
 
-      _onSaveITP(oData){
-        debugger;
-        this._saveITP("");
-      },
+      //_onSaveITP(oData){
+      //  debugger;
+      //  this._saveITP("");
+      //},
 
       _saveITP(sProfile) {
         const oCtrl = this;
@@ -734,7 +740,7 @@ sap.ui.define(
         const sGeneralRemarks = oDataModel.getProperty("/GeneralRemarks");
         
 
-        const oTextArea = new sap.m.TextArea({
+        const oTextArea = new sap.m.TextArea({ rows: "3", cols: "100",
           value: sGeneralRemarks //oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 

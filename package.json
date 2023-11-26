@@ -14,15 +14,15 @@
   },
   "devDependencies": {
     "@sap-ux/ui5-middleware-fe-mockserver": "2",
-    "@sap/ux-ui5-tooling": "1",
-    "@ui5/cli": "^2.14.1",
-    "rimraf": "^3.0.2",
-    "ui5-task-flatten-library": "0.2.5",
+    "@sap/ux-ui5-tooling": "^1.11.5",
+    "@ui5/cli": "^3.7.2",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-prettier": "^4.2.1"
+    "eslint-plugin-prettier": "^4.2.1",
+    "rimraf": "^3.0.2",
+    "ui5-task-flatten-library": "0.2.5"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-client=100&sap-ui-xx-viewCache=false#zproddoc-display\"",
