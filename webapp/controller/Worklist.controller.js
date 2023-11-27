@@ -431,7 +431,10 @@ sap.ui.define(
           .getParent()
           ._oControl._oOpenBy.getModel("data");
 
-        oDataModel.setProperty("/ReleaseComment", sValue);
+        let aSalesItems = oDataModel.getProperty("/SalesItems");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+
+        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment = sValue;
 
         oControl.getParent().getParent().getParent().close();
 
@@ -472,8 +475,8 @@ sap.ui.define(
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
-        const sGeneralRemarks = oDataModel.getProperty("/SalesOrder/GeneralRemarks");
-        const sReleaseComment = oDataModel.getProperty("/SalesOrder/ReleaseComment");
+        const sGeneralRemarks = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks;
+        const sReleaseComment = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment;
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
@@ -773,7 +776,10 @@ sap.ui.define(
           .getParent()
           ._oControl._oOpenBy.getModel("data");
 
-        oDataModel.setProperty("/SalesOrder/GeneralRemarks", sValue);
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        let aSalesItems = oDataModel.getProperty("/SalesItems");
+
+        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment = sValue;
 
         oControl.getParent().getParent().getParent().close();
       },
