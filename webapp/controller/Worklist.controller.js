@@ -150,6 +150,7 @@ sap.ui.define(
               SalesOrderItem: +e.SalesOrderItem,
               ItpState: e.ItpState,
               SalesRelevantOnly: e.SalesRelevantOnly,
+              GeneralRemarks: e.GeneralRemarks,
             }));
             oDataModel.setProperty("/SalesItems", aSalesItems);
             oDataModel.setProperty("/SalesOrder", {
@@ -472,8 +473,12 @@ sap.ui.define(
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
-        const sGeneralRemarks = oDataModel.getProperty("/SalesOrder/GeneralRemarks");
-        const sReleaseComment = oDataModel.getProperty("/SalesOrder/ReleaseComment");
+        const sGeneralRemarks = oDataModel.getProperty(
+          "/SalesOrder/GeneralRemarks"
+        );
+        const sReleaseComment = oDataModel.getProperty(
+          "/SalesOrder/ReleaseComment"
+        );
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
@@ -730,7 +735,9 @@ sap.ui.define(
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
-        const sGeneralRemarks = oDataModel.getProperty("/SalesOrder/GeneralRemarks");
+        const sGeneralRemarks = oDataModel.getProperty(
+          "/SalesOrder/GeneralRemarks"
+        );
 
         const oTextArea = new sap.m.TextArea({
           rows: 3,
