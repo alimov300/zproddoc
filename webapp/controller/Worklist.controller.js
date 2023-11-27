@@ -734,9 +734,13 @@ sap.ui.define(
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
-        const sGeneralRemarks = oDataModel.getProperty(
-          "/SalesOrder/GeneralRemarks"
-        );
+        //const sGeneralRemarks = oDataModel.getProperty(
+        //  "/SalesOrder/GeneralRemarks"
+        //);
+
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const aSalesItems = oDataModel.getProperty("/SalesItems");
+        const sGeneralRemarks = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks;
 
         const oTextArea = new sap.m.TextArea({
           rows: 3,
@@ -782,7 +786,7 @@ sap.ui.define(
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         let aSalesItems = oDataModel.getProperty("/SalesItems");
 
-        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment = sValue;
+        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks = sValue;
 
         oControl.getParent().getParent().getParent().close();
       },
