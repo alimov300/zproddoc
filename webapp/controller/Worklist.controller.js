@@ -90,9 +90,12 @@ sap.ui.define(
           .attachChange(oCtrl.onReadRefOrder, oCtrl);
 
         const oRouter = this.getOwnerComponent().getRouter();
-            oRouter.getRoute("worklist").attachMatched((oEvent) => {
-                this._selectItemWithId(oEvent.getParameter("arguments").SalesOrderID, oEvent.getParameter("arguments").SalesOrderItem);
-            }, this);
+        oRouter.getRoute("worklist").attachMatched((oEvent) => {
+          this._selectItemWithId(
+            oEvent.getParameter("arguments").SalesOrderID,
+            oEvent.getParameter("arguments").SalesOrderItem
+          );
+        }, this);
 
         const oBus = sap.ui.getCore().getEventBus();
         oBus.subscribe("release", "itp", this.onToggleRelease, this);
@@ -257,7 +260,7 @@ sap.ui.define(
             SalesOrderItem: oSalesOrder.SalesOrderItem,
           },
           success(data) {
-            const { results } = data;
+            MessageToast.show(data.Message);
           },
         });
       },
@@ -714,8 +717,6 @@ sap.ui.define(
       },
 
       onApplyGenRemark(oEvent) {
-        
-
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         //const sGeneralRemarks = oDataModel.getProperty(
@@ -750,8 +751,6 @@ sap.ui.define(
       },
 
       popoverGerRemarkPress(oEvent) {
-        
-
         const oControl = oEvent.getSource();
 
         const sValue = oControl
