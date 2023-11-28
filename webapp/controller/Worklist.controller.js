@@ -176,22 +176,19 @@ sap.ui.define(
       },
 
       _onCommentToggleRelease(oEvent) {
-        debugger;
-
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const sComments = oDataModel.getProperty("/SalesOrder/ReleaseComment");
 
         const oTextArea = new sap.m.Input({
           width: "127rem",
-          value: sComments, //oEvent.getSource().getModel("data").getProperty(sSrc),
+          value: sComments,
         });
 
         const oBtn = new Button({
           icon: "sap-icon://accept",
           press: this.popoverSaveReleasePress,
         });
-        //oBtn.data("srcCell", sSrc);
 
         this.mPopover = new Popover({
           content: [oTextArea],
@@ -220,6 +217,7 @@ sap.ui.define(
             SalesOrderID: oSalesOrder.SalesOrderID,
             SalesOrderItem: oSalesOrder.SalesOrderItem,
             ItpState: oSalesOrder.ItpState,
+            ReleaseComment: oSalesOrder.ReleaseComment,
           },
           {
             method: "PUT",
@@ -413,18 +411,12 @@ sap.ui.define(
       },
 
       popoverSaveReleasePress(oEvent) {
-        debugger;
-
         const oControl = oEvent.getSource();
-
         const sValue = oControl
           .getParent()
           .getParent()
           .getContent()[0]
           .getValue();
-
-        const oCtrl = this;
-        //const oDataModel = oCtrl.getView().getModel("data");
 
         const oDataModel = oControl
           .getParent()
@@ -432,30 +424,15 @@ sap.ui.define(
           .getParent()
           ._oControl._oOpenBy.getModel("data");
 
-        let aSalesItems = oDataModel.getProperty("/SalesItems");
-        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
-
-        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment = sValue;
-
+        oDataModel.setProperty("/SalesOrder/ReleaseComment", sValue);
         oControl.getParent().getParent().getParent().close();
 
-        //oControl
-        //  .getParent()
-        //  .getParent()
-        //  .getParent()
-        //  ._oControl._oOpenBy._saveITP("");
-
-        const bus = sap.ui.getCore().getEventBus();
-        bus.publish("release", "itp", {
+        const oBus = sap.ui.getCore().getEventBus();
+        oBus.publish("release", "itp", {
           id: "onRelease",
           data: {},
         });
       },
-
-      //_onSaveITP(oData){
-      //  debugger;
-      //  this._saveITP("");
-      //},
 
       _saveITP(sProfile) {
         const oCtrl = this;
@@ -476,8 +453,12 @@ sap.ui.define(
         const aSalesItems = oDataModel.getProperty("/SalesItems");
         const oServiceModel = oCtrl.getView().getModel();
         const aITPStruc = oDataModel.getProperty("/itp");
-        const sGeneralRemarks = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks;
-        const sReleaseComment = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).ReleaseComment;
+        const sGeneralRemarks = aSalesItems.find(
+          (x) => x.SalesOrderItem == oSalesOrder.SalesOrderItem
+        ).GeneralRemarks;
+        const sReleaseComment = aSalesItems.find(
+          (x) => x.SalesOrderItem == oSalesOrder.SalesOrderItem
+        ).ReleaseComment;
         const oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
@@ -740,7 +721,9 @@ sap.ui.define(
 
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const aSalesItems = oDataModel.getProperty("/SalesItems");
-        const sGeneralRemarks = aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks;
+        const sGeneralRemarks = aSalesItems.find(
+          (x) => x.SalesOrderItem == oSalesOrder.SalesOrderItem
+        ).GeneralRemarks;
 
         const oTextArea = new sap.m.TextArea({
           rows: 3,
@@ -786,7 +769,9 @@ sap.ui.define(
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         let aSalesItems = oDataModel.getProperty("/SalesItems");
 
-        aSalesItems.find(x => x.SalesOrderItem == oSalesOrder.SalesOrderItem).GeneralRemarks = sValue;
+        aSalesItems.find(
+          (x) => x.SalesOrderItem == oSalesOrder.SalesOrderItem
+        ).GeneralRemarks = sValue;
 
         oControl.getParent().getParent().getParent().close();
       },

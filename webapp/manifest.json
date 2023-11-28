@@ -83,7 +83,7 @@
         }
       ]
     },
-    
+
     "routing": {
       "config": {
         "routerClass": "sap.m.routing.Router",
@@ -93,15 +93,12 @@
         "controlAggregation": "pages",
         "controlId": "app",
         "clearControlAggregation": false
-        
       },
       "routes": [
         {
-          "pattern": "",
+          "pattern": ":SalesOrderID:/:SalesOrderItem:",
           "name": "worklist",
-          "target": [
-              "worklist"
-          ]
+          "target": ["worklist"]
         }
       ],
       "targets": {
