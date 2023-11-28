@@ -714,7 +714,7 @@ sap.ui.define(
       },
 
       onApplyGenRemark(oEvent) {
-        debugger;
+        
 
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
@@ -750,7 +750,7 @@ sap.ui.define(
       },
 
       popoverGerRemarkPress(oEvent) {
-        debugger;
+        
 
         const oControl = oEvent.getSource();
 
