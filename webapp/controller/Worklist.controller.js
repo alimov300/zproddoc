@@ -70,10 +70,6 @@ sap.ui.define(
         );
         oCtrl.getView().addDependent(this.oDialog);
 
-        /* oCtrl.oTemplateDialog = oCtrl.loadFragment({
-          name: "zproddoc.view.Template",
-        });  */
-
         oCtrl.oTemplateDialog = sap.ui.xmlfragment(
           this.getView().getId(),
           "zproddoc.view.Template"
@@ -93,15 +89,19 @@ sap.ui.define(
           .byId("inpRefSalesOrder")
           .attachChange(oCtrl.onReadRefOrder, oCtrl);
 
-        const oBus = sap.ui.getCore().getEventBus();
+        oCtrl.getView().addEventDelegate({
+          onBeforeShow: (evt) => {
+            debugger;
+          },
+        });
 
+        const oBus = sap.ui.getCore().getEventBus();
         oBus.subscribe("release", "itp", this.onToggleRelease, this);
       },
 
       onAfterRendering() {
         const oCtrl = this;
         oCtrl.readFixedValues();
-        // oCtrl.onReadPos();
       },
 
       readFixedValues() {
