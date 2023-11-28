@@ -89,14 +89,17 @@ sap.ui.define(
           .byId("inpRefSalesOrder")
           .attachChange(oCtrl.onReadRefOrder, oCtrl);
 
-        oCtrl.getView().addEventDelegate({
-          onBeforeShow: (evt) => {
-            debugger;
-          },
-        });
+        const oRouter = this.getOwnerComponent().getRouter();
+            oRouter.getRoute("worklist").attachMatched((oEvent) => {
+                this._selectItemWithId(oEvent.getParameter("arguments").SalesOrderID, oEvent.getParameter("arguments").SalesOrderItem);
+            }, this);
 
         const oBus = sap.ui.getCore().getEventBus();
         oBus.subscribe("release", "itp", this.onToggleRelease, this);
+      },
+
+      _selectItemWithId(id, item) {
+        //implementation
       },
 
       onAfterRendering() {
