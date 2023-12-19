@@ -101,8 +101,19 @@ sap.ui.define(
         oBus.subscribe("release", "itp", this.onToggleRelease, this);
       },
 
-      _selectItemWithId(id, item) {
-        //implementation
+      _selectItemWithId(aId, aItem) {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        oDataModel.setProperty("/SalesOrder", {
+          SalesOrderID: aId,
+          SalesOrderItem: aItem,
+        });
+        Promise.all([oCtrl.onReadOrderItems(), oCtrl.onReadOrderHead()]).then(
+          () => {
+            oDataModel.setProperty("/SalesOrder/SalesOrderItem", aItem);
+            oCtrl.onReadPos();
+          }
+        );
       },
 
       onAfterRendering() {
@@ -138,47 +149,68 @@ sap.ui.define(
 
       onReadOrder() {
         const oCtrl = this;
+        // eslint-disable-next-line new-cap
+        return Promise.all([oCtrl.onReadOrderItems(), oCtrl.onReadOrderHead()]);
+      },
+
+      onReadOrderItems() {
+        const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
         const oServiceModel = oCtrl.getView().getModel();
-        oServiceModel.read("/SalesOrderInfoSet", {
-          method: "GET",
-          filters: [
-            new sap.ui.model.Filter(
-              "SalesOrderID",
-              sap.ui.model.FilterOperator.EQ,
-              oSalesOrder.SalesOrderID
-            ),
-          ],
-          success(data) {
-            const { results } = data;
-            const aSalesItems = results.map((e) => ({
-              SalesOrderItem: +e.SalesOrderItem,
-              ItpState: e.ItpState,
-              SalesRelevantOnly: e.SalesRelevantOnly,
-              GeneralRemarks: e.GeneralRemarks,
-            }));
-            oDataModel.setProperty("/SalesItems", aSalesItems);
-            oDataModel.setProperty("/SalesOrder", {
-              SalesOrderID: oSalesOrder.SalesOrderID,
-              SalesOrderItem: "",
-            });
-            oDataModel.setProperty("/itp", []);
-          },
-        });
 
-        oServiceModel.read(
-          `/SalesOrderHeadSet(SalesOrderID='${oSalesOrder.SalesOrderID}')`,
-          {
+        return new Promise((resolve) => {
+          oServiceModel.read("/SalesOrderInfoSet", {
             method: "GET",
+            filters: [
+              new sap.ui.model.Filter(
+                "SalesOrderID",
+                sap.ui.model.FilterOperator.EQ,
+                oSalesOrder.SalesOrderID
+              ),
+            ],
             success(data) {
-              oDataModel.setProperty("/HeadInfo", data);
+              const { results } = data;
+              const aSalesItems = results.map((e) => ({
+                SalesOrderItem: +e.SalesOrderItem,
+                ItpState: e.ItpState,
+                SalesRelevantOnly: e.SalesRelevantOnly,
+                GeneralRemarks: e.GeneralRemarks,
+              }));
+              oDataModel.setProperty("/SalesItems", aSalesItems);
+              oDataModel.setProperty("/SalesOrder", {
+                SalesOrderID: oSalesOrder.SalesOrderID,
+                SalesOrderItem: "",
+              });
+              oDataModel.setProperty("/itp", []);
+              resolve();
             },
-            error() {
-              oDataModel.setProperty("/HeadInfo", {});
-            },
-          }
-        );
+          });
+        });
+      },
+
+      onReadOrderHead() {
+        const oCtrl = this;
+        const oDataModel = oCtrl.getView().getModel("data");
+        const oSalesOrder = oDataModel.getProperty("/SalesOrder");
+        const oServiceModel = oCtrl.getView().getModel();
+
+        return new Promise((resolve, reject) => {
+          oServiceModel.read(
+            `/SalesOrderHeadSet(SalesOrderID='${oSalesOrder.SalesOrderID}')`,
+            {
+              method: "GET",
+              success(data) {
+                oDataModel.setProperty("/HeadInfo", data);
+                resolve();
+              },
+              error() {
+                oDataModel.setProperty("/HeadInfo", {});
+                reject();
+              },
+            }
+          );
+        });
       },
 
       _onCommentToggleRelease(oEvent) {
