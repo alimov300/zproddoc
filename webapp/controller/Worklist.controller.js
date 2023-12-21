@@ -226,6 +226,7 @@ sap.ui.define(
       _onCommentToggleRelease(oEvent) {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
+        oDataModel.setProperty("/SalesOrder/ReleaseComment", "");
         const sComments = oDataModel.getProperty("/SalesOrder/ReleaseComment");
 
         const oTextArea = new sap.m.Input({
@@ -549,6 +550,7 @@ sap.ui.define(
 
       onPrintForm(el) {
         const oCtrl = this;
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
 
@@ -560,8 +562,14 @@ sap.ui.define(
 
         let langNames = {
           Languages: [
-            { Name: "English", Key: "EN" },
-            { Name: "German", Key: "DE" },
+            {
+              Name: oLangModel.getResourceBundle().getText("lblEnglish"),
+              Key: "EN",
+            },
+            {
+              Name: oLangModel.getResourceBundle().getText("lblGerman"),
+              Key: "DE",
+            },
           ],
         };
         let langModel = new sap.ui.model.json.JSONModel(langNames);
@@ -577,13 +585,13 @@ sap.ui.define(
         if (!this.oChooseDialog) {
           this.oChooseDialog = new Dialog({
             type: DialogType.Message,
-            title: "Confirm",
+            title: oLangModel.getResourceBundle().getText("lblChooseLang"),
             content: new sap.ui.layout.VerticalLayout({
-              content: [new Text({ text: "Please choose language" }), comboBox],
+              content: [comboBox],
             }),
             beginButton: new Button({
               type: ButtonType.Emphasized,
-              text: "Submit",
+              text: oLangModel.getResourceBundle().getText("btnOK"),
               press: function () {
                 const sKey = this.oChooseDialog
                   .getContent()[0]
