@@ -581,6 +581,9 @@ sap.ui.define(
 
         comboBox.setModel(langModel);
         comboBox.bindItems("/Languages", oItemTemplate);
+        comboBox.setSelectedKey(
+          sap.ui.getCore().getConfiguration().getLanguage().toUpperCase()
+        );
 
         if (!this.oChooseDialog) {
           this.oChooseDialog = new Dialog({
@@ -595,7 +598,7 @@ sap.ui.define(
               press: function () {
                 const sKey = this.oChooseDialog
                   .getContent()[0]
-                  .getContent()[1]
+                  .getContent()[0]
                   .getSelectedKey();
                 const sFile = el.oSource.getId().includes("btnPrintFormCust")
                   ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}_${sKey}`
@@ -611,7 +614,7 @@ sap.ui.define(
               }.bind(this),
             }),
             endButton: new Button({
-              text: "Cancel",
+              text: oLangModel.getResourceBundle().getText("btnCancel"),
               press: function () {
                 this.oChooseDialog.close();
               }.bind(this),
