@@ -583,6 +583,11 @@ sap.ui.define(
             oDataModel.setProperty("/itp", itpTree);
             oCtrl.applyFilters();
           },
+          error(data) {
+            MessageToast.show(
+              JSON.parse(data.responseText).error.message.value
+            );
+          },
         });
       },
 
