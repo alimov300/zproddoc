@@ -9,6 +9,11 @@ sap.ui.define(
     "sap/ui/model/BindingMode",
     "sap/m/MessageToast",
     "../model/formatter",
+    "sap/m/Dialog",
+    "sap/m/Label",
+    "sap/m/ComboBox",
+    "sap/m/library",
+    "sap/m/Text",
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -32,7 +37,12 @@ sap.ui.define(
     Button,
     BindingMode,
     MessageToast,
-    formatter
+    formatter,
+    Dialog,
+    Label,
+    ComboBox,
+    mobileLibrary,
+    Text
   ) =>
     Controller.extend("zproddoc.controller.Worklist", {
       formatter,
@@ -216,6 +226,7 @@ sap.ui.define(
       _onCommentToggleRelease(oEvent) {
         const oCtrl = this;
         const oDataModel = oCtrl.getView().getModel("data");
+        oDataModel.setProperty("/SalesOrder/ReleaseComment", "");
         const sComments = oDataModel.getProperty("/SalesOrder/ReleaseComment");
 
         const oTextArea = new sap.m.Input({
@@ -539,16 +550,79 @@ sap.ui.define(
 
       onPrintForm(el) {
         const oCtrl = this;
+        const oLangModel = oCtrl.getOwnerComponent().getModel("i18n");
         const oDataModel = oCtrl.getView().getModel("data");
         const oSalesOrder = oDataModel.getProperty("/SalesOrder");
-        const sFile = el.oSource.getId().includes("btnPrintFormCust")
-          ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`
-          : `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`;
-        const oServiceModel = oCtrl.getView().getModel();
-        window.open(
-          `${oServiceModel.sServiceUrl}/ITPFormSet('${sFile}.pdf')/$value`,
-          "_blank"
+
+        // shortcut for sap.m.ButtonType
+        const { ButtonType } = mobileLibrary;
+
+        // shortcut for sap.m.DialogType
+        const { DialogType } = mobileLibrary;
+
+        let langNames = {
+          Languages: [
+            {
+              Name: oLangModel.getResourceBundle().getText("lblEnglish"),
+              Key: "EN",
+            },
+            {
+              Name: oLangModel.getResourceBundle().getText("lblGerman"),
+              Key: "DE",
+            },
+          ],
+        };
+        let langModel = new sap.ui.model.json.JSONModel(langNames);
+        let comboBox = new ComboBox({ sId: "idLanguageCombo" });
+        let oItemTemplate = new sap.ui.core.Item({
+          key: "{Key}",
+          text: "{Name}", // here goes your binding for the property "Name" of your item
+        });
+
+        comboBox.setModel(langModel);
+        comboBox.bindItems("/Languages", oItemTemplate);
+        comboBox.setSelectedKey(
+          sap.ui.getCore().getConfiguration().getLanguage().toUpperCase()
         );
+
+        if (!this.oChooseDialog) {
+          this.oChooseDialog = new Dialog({
+            type: DialogType.Message,
+            title: oLangModel.getResourceBundle().getText("lblChooseLang"),
+            content: new sap.ui.layout.VerticalLayout({
+              content: [comboBox],
+            }),
+            beginButton: new Button({
+              type: ButtonType.Emphasized,
+              text: oLangModel.getResourceBundle().getText("btnOK"),
+              press: function () {
+                const sKey = this.oChooseDialog
+                  .getContent()[0]
+                  .getContent()[0]
+                  .getSelectedKey();
+                const sFile = el.oSource.getId().includes("btnPrintFormCust")
+                  ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}_${sKey}`
+                  : `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}_${sKey}`;
+                const oServiceModel = oCtrl.getView().getModel();
+                window.open(
+                  `${oServiceModel.sServiceUrl}/ITPFormSet('${sFile}.pdf')/$value`,
+                  "_blank"
+                );
+
+                // MessageToast.show("Submit pressed!");
+                this.oChooseDialog.close();
+              }.bind(this),
+            }),
+            endButton: new Button({
+              text: oLangModel.getResourceBundle().getText("btnCancel"),
+              press: function () {
+                this.oChooseDialog.close();
+              }.bind(this),
+            }),
+          });
+        }
+
+        this.oChooseDialog.open();
       },
 
       onLoadITP(sProfile) {
