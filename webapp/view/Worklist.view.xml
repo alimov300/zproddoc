@@ -207,6 +207,16 @@
 			        </m:ComboBox>
                 </template>
             </Column>                        
+            <Column id="cln12" label="{i18n>colMatGroup}" width="12rem">
+                <template templateShareable="false">
+                    <m:Label id="_IDGenComboBox1matgrp" text="{data>MatGroupDescr}"/>
+                </template>
+            </Column>                        
+            <Column id="cln13" label="{i18n>colStdTextKey}" width="12rem">
+                <template templateShareable="false">
+                    <m:Label id="_IDGenComboBox1sttxtkey" text="{data>StdTxtKeyDescr}"/>
+                </template>
+            </Column>      
 <!--            <Column id="cln2" width="9rem">
                 <m:Label text="Price" />
                 <template>

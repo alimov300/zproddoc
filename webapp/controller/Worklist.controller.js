@@ -305,6 +305,11 @@ sap.ui.define(
           success(data) {
             MessageToast.show(data.Message);
           },
+          error(data) {
+            MessageToast.show(
+              JSON.parse(data.responseText).error.message.value
+            );
+          },
         });
       },
 
