@@ -562,6 +562,10 @@ sap.ui.define(
         // shortcut for sap.m.ButtonType
         const { ButtonType } = mobileLibrary;
 
+        this.sFileBase = el.oSource.getId().includes("btnPrintFormCust")
+          ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`
+          : `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}`;
+
         // shortcut for sap.m.DialogType
         const { DialogType } = mobileLibrary;
 
@@ -605,9 +609,7 @@ sap.ui.define(
                   .getContent()[0]
                   .getContent()[0]
                   .getSelectedKey();
-                const sFile = el.oSource.getId().includes("btnPrintFormCust")
-                  ? `ITPCust_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}_${sKey}`
-                  : `ITP_${oSalesOrder.SalesOrderID}_${oSalesOrder.SalesOrderItem}_${sKey}`;
+                const sFile = `${this.sFileBase}_${sKey}`;
                 const oServiceModel = oCtrl.getView().getModel();
                 window.open(
                   `${oServiceModel.sServiceUrl}/ITPFormSet('${sFile}.pdf')/$value`,
@@ -756,6 +758,18 @@ sap.ui.define(
             oDataModel.setProperty("/ActivityScope", aActivityScope);
           },
         });
+      },
+
+      onCustDocChange(par1) {
+        const sPath = par1
+          .getSource()
+          .getBindingInfo("selected")
+          .binding.getContext()
+          .getPath();
+        const oObject = this.getView().getModel("data").getObject(sPath);
+        if (oObject.IsCustomerDoc) {
+          oObject.Selected = true;
+        }
       },
 
       onActivityChange(par1) {
@@ -1117,6 +1131,7 @@ sap.ui.define(
           //if (el.Selected) {
           array.push({
             Selected: el.Selected,
+            Mandatory: el.Mandatory,
             NodeKey: el.NodeKey,
             ParentNodeKey: el.ParentNodeKey,
             InspItem: el.InspItem,

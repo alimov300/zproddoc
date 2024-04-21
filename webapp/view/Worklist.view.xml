@@ -83,14 +83,14 @@
             <Column id="cln1" label="{i18n>colNum}" width="16rem" class="parent1">            
                 <template templateShareable="false">
                     <m:HBox id="_IDGenHBox1HBox" class="parent2">
-                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
+                    <m:CheckBox id="chk1" visible="{data>Selectable}" selected="{data>Selected}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' &amp;&amp; ${data>Mandatory} ? false : true }" />
                     <m:Label id="txt1" text="{data>InspItemDescr}" class="sapUiTinyMarginTop" wrapping="false" />
                     </m:HBox>
                 </template>
             </Column>
             <Column id="clnChck1" label="{i18n>colCustomerDocument}" width="9rem">
                 <template templateShareable="false">
-                    <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" visible="{data>Selectable}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
+                    <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" select="onCustDocChange" visible="{data>Selectable}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
                 </template>
             </Column>
                                 
