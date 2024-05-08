@@ -337,7 +337,7 @@ sap.ui.define(
             }));
             oDataModel.setProperty(
               "/RefSalesItems",
-              aSalesItems.filter((el) => el.ItpState === "C")
+              aSalesItems.filter((el) => el.ItpState === "R")
             );
             oDataModel.setProperty("/RefSalesOrder", {
               SalesOrderID: oSalesOrder.SalesOrderID,
@@ -348,6 +348,7 @@ sap.ui.define(
       },
 
       onSalesOrderSuggest(evt) {
+        debugger;
         const oCtrl = this;
         const sTerm = evt.getParameter("suggestValue");
         const aFilters = [];

@@ -7,7 +7,8 @@
      <HBox id="hboxRefSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <Label id="lblRefSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpRefSalesOrder" />
         <Input id="inpRefSalesOrder" change="onReadRefOrder" value="{data>/RefSalesOrder/SalesOrderID}" 
-                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest="onSalesOrderSuggest" suggestionItems="{ path: '/SalesOrderHeadSet' }" >
+                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest=".onSalesOrderSuggest" 
+                 suggestionItems="{ path: '/SalesOrderHeadSet' }" >
 	      <suggestionItems>
             <core:ListItem text="{SalesOrderID}" additionalText="{CustomerRef}"/>
 	      </suggestionItems>
