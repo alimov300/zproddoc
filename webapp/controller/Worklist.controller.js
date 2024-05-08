@@ -348,7 +348,6 @@ sap.ui.define(
       },
 
       onSalesOrderSuggest(evt) {
-        debugger;
         const oCtrl = this;
         const sTerm = evt.getParameter("suggestValue");
         const aFilters = [];
