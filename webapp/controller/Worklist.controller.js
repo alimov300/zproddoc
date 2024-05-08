@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 sap.ui.define(
   [
     "sap/ui/core/mvc/Controller",
@@ -513,7 +514,7 @@ sap.ui.define(
         const sReleaseComment = aSalesItems.find(
           (x) => x.SalesOrderItem == oSalesOrder.SalesOrderItem
         ).ReleaseComment;
-        const oITP = {
+        let oITP = {
           SalesOrderID: oSalesOrder.SalesOrderID,
           SalesOrderItem: oSalesOrder.SalesOrderItem,
           Profile: sProfile || "",
@@ -521,6 +522,7 @@ sap.ui.define(
           GeneralRemarks: sGeneralRemarks,
           ReleaseComment: sReleaseComment,
         };
+        //   oCtrl._splitCompositeActKey(oITP.OrderToITPStruc);
         oServiceModel.create("/SalesOrderInfoSet", oITP, {
           method: "POST",
           success() {
@@ -660,6 +662,7 @@ sap.ui.define(
           success(data) {
             const { results } = data;
             oCtrl._enrichWithActScope(results);
+            oCtrl._enrichWithCompositeActKey(results);
             const itpTree = oCtrl._unflatten(results);
             oDataModel.setProperty("/itp", itpTree);
             oCtrl.applyFilters();
@@ -773,7 +776,12 @@ sap.ui.define(
       },
 
       onActivityChange(par1) {
-        const sKey = par1.getParameter("selectedItem").getProperty("key");
+        const aActParts = par1
+          .getParameter("selectedItem")
+          .getProperty("key")
+          .split("-");
+        const sKey = { Activity: aActParts[0], ActivityAltnr: aActParts[1] };
+
         const sPath = par1
           .getSource()
           .getBindingInfo("items")
@@ -782,7 +790,9 @@ sap.ui.define(
         const oObject = this.getView().getModel("data").getObject(sPath);
 
         const oActScope = oObject.ActivityScope.find(
-          (el) => el.Activity === sKey
+          (el) =>
+            el.Activity === sKey.Activity &&
+            el.ActivityAltnr === sKey.ActivityAltnr
         );
 
         if (oActScope.IsSpecial) {
@@ -1085,6 +1095,24 @@ sap.ui.define(
           });
       },
 
+      _enrichWithCompositeActKey(array) {
+        array.forEach((e) => {
+          e.ActivityCompKey = `${e.Activity}-${e.ActivityPlnGr}`;
+        });
+      },
+
+      _splitCompositeActKey(array) {
+        array.forEach((e) => {
+          if (e.ActivityCompKey) {
+            const aActParts = e.ActivityCompKey.split("-");
+            if (aActParts.length > 1) {
+              e.Activity = aActParts[0];
+              e.ActivityPlnGr = aActParts[1];
+            }
+          }
+        });
+      },
+
       _unflatten(array, parent) {
         let tree = [];
         parent = typeof parent !== "undefined" ? parent : { NodeKey: "" };
@@ -1128,7 +1156,14 @@ sap.ui.define(
         const array = [];
 
         tree.forEach((el) => {
-          //if (el.Selected) {
+          if (el.ActivityCompKey) {
+            const aActParts = el.ActivityCompKey.split("-");
+            if (aActParts.length > 1) {
+              el.Activity = aActParts[0];
+              el.ActivityPlnGr = aActParts[1];
+            }
+          }
+
           array.push({
             Selected: el.Selected,
             Mandatory: el.Mandatory,
