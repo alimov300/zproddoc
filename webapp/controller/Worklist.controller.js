@@ -89,6 +89,11 @@ sap.ui.define(
 
         oCtrl
           .getView()
+          .byId("inpRefSalesOrder")
+          .attachSuggest(oCtrl.onSalesOrderSuggest, oCtrl);
+
+        oCtrl
+          .getView()
           .byId("btnTemplateLoad")
           .attachPress(oCtrl.onTemplateLoad, oCtrl);
         oCtrl
@@ -1055,8 +1060,8 @@ sap.ui.define(
             oView.getId(),
             "zproddoc.view.Template",
             oCtrl
-          );
-          oCtrl.getView().addDependent(oCtrl.oTmplDialog);
+          ).bind(this);
+          oCtrl.getView().addDependent(oCtrl.oTmplDialog).bind(this);
         }
         oCtrl.oTmplDialog.open();
       },

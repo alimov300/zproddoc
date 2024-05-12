@@ -6,13 +6,24 @@
    <Dialog id="dlgTemplate" title="{i18n>cptTemplateOrder}">
      <HBox id="hboxRefSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <Label id="lblRefSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpRefSalesOrder" />
-        <Input id="inpRefSalesOrder" change="onReadRefOrder" value="{data>/RefSalesOrder/SalesOrderID}" 
-                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest=".onSalesOrderSuggest" 
+        <!-- <Input id="inpRefSalesOrder" change="onReadRefOrder" value="{data>/RefSalesOrder/SalesOrderID}" 
+                 showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem"  
                  suggestionItems="{ path: '/SalesOrderHeadSet' }" >
 	      <suggestionItems>
             <core:ListItem text="{SalesOrderID}" additionalText="{CustomerRef}"/>
 	      </suggestionItems>
-        </Input>
+        </Input> -->
+        	<Input 
+			id="inpRefSalesOrder" 
+         change="onReadRefOrder" suggest="onSalesOrderSuggest"  
+         value="{data>/RefSalesOrder/SalesOrderID}" 
+			placeholder="Enter number" 
+			showSuggestion="true"          
+			suggestionItems="{/SalesOrderHeadSet}">
+			<suggestionItems>
+				<core:ListItem text="{SalesOrderID}" additionalText="{CustomerRef}"/>
+			</suggestionItems>
+		   </Input>
 
         <Label id="lblRefPosition" text="{i18n>lblPosition}" class="sapUiResponsiveMargin" labelFor="inpSalesOrderPos" />
         <Select id="selRefSalesOrderItem"
