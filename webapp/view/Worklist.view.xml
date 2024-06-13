@@ -1,6 +1,18 @@
 <mvc:View controllerName="zproddoc.controller.Worklist" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" 
          displayBlock="true" xmlns:m="sap.m" xmlns="sap.ui.table" xmlns:core="sap.ui.core">
-    <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
+ 
+    
+    <TreeTable id="treeInspPlan" 
+               enableColumnReordering="false"
+               alternateRowColors="true" 
+               selectionBehavior="Row"
+               selectionMode="Single"
+               class="sapUiSizeCompact"           
+               visibleRowCountMode="Auto"
+               rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
+        <extension>
+
+      <m:HBox id="hboxSalesOrder" class="sapUiTinyMarginBegin sapUiTinyMarginTop">
         <m:Label id="lblSalesOrder" text="{i18n>lblSalesOrderNum}" class="sapUiResponsiveMargin" labelFor="inpSalesOrder" />
         <m:Input id="inpSalesOrder" change="onReadOrder" value="{data>/SalesOrder/SalesOrderID}" 
                  showSuggestion="true" showValueHelp="true" startSuggestion="3" maxSuggestionWidth="24rem" suggest="onSalesOrderSuggest" suggestionItems="{ path: '/SalesOrderHeadSet' }" >
@@ -34,19 +46,11 @@
         <m:Label class="sapUiLargeMarginBegin sapUiTinyMarginTop" id="lblCustomer" text="{data>/HeadInfo/CustomerName}"/>
     </m:HBox>
 
-    <TreeTable id="treeInspPlan" selectionMode="None"
-               enableColumnReordering="false"
-               alternateRowColors="true" 
-               class="sapUiSizeCompact"           
-               visibleRowCountMode="Auto"
-               rows="{ path: 'data>/itp', parameters: { arrayNames:['children'], countMode: 'Inline', numberOfExpandedLevels: 3 } }">
-        <extension>
+
           <m:HBox id="hboxApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop" justifyContent="End">
            <m:OverflowToolbar id="otbApplToolbar" class="sapUiTinyMarginEnd sapUiTinyMarginTop">
             <m:Title id="title" text="" />
 
-      <!--      <m:Button id="btnLoad" text="{i18n>btnLoad}" icon="sap-icon://refresh" press="onLoadITP" />   
-            <m:Button id="btnCopyITP" text="{i18n>btnCopyITP}" icon="sap-icon://inspect" press="onCopyITP" />   -->
             <m:Button id="btnGenRemark" text="{i18n>btnGenRemark}" icon="sap-icon://approvals" press="onApplyGenRemark" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== 'R' }"/>
             <m:Button id="btnApplyProfile" text="{i18n>btnApplyProfile}" icon="sap-icon://wrench" press="onApplyProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} === '' }"/>
             <m:Button id="btnSaveAsProfile" text="{i18n>btnSaveProfile}" icon="sap-icon://add-equipment" press="onSaveAsProfile" visible="{= ${data>/SalesOrder/SalesOrderItem} !== '' &amp;&amp; ${data>/SalesOrder/ItpState} !== '' }"/>
@@ -88,14 +92,14 @@
                     </m:HBox>
                 </template>
             </Column>
-            <Column id="clnChck1" label="{i18n>colCustomerDocument}" width="9rem">
+            <Column id="clnChck1" label="{i18n>colCustomerDocument}" width="4rem">
                 <template templateShareable="false">
                     <m:CheckBox id="_IDGenCheckBox1" selected="{data>IsCustomerDoc}" select="onCustDocChange" visible="{data>Selectable}" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" />
                 </template>
             </Column>
                                 
 
-            <Column id="cln2" label="{i18n>colActivity}" width="9rem">
+            <Column id="cln2" label="{i18n>colActivity}" width="14rem">
                 <template templateShareable="false">
                 	<m:ComboBox id="_IDGenComboBox1" visible="{= ${data>Selectable} ? true : false }" selectionChange="onActivityChange" editable="{= ${data>/SalesOrder/ItpState} !== 'R' }" 
 				        items="{
@@ -217,20 +221,6 @@
                     <m:Label id="_IDGenComboBox1sttxtkey" text="{data>StdTxtKeyDescr}"/>
                 </template>
             </Column>      
-<!--            <Column id="cln2" width="9rem">
-                <m:Label text="Price" />
-                <template>
-                    <u:Currency value="{amount}" currency="{currency}" />
-                </template>
-            </Column>
-            <Column id="cln3" width="11rem">
-                <m:Label text="Size" />
-                <template>
-                    <m:Select items="{path: '/sizes', templateShareable: true}" selectedKey="{size}" visible="{= !!${size}}" forceSelection="false">
-                        <core:Item key="{key}" text="{value}" />
-                    </m:Select>
-                </template>
-            </Column>  -->
         </columns>    
     </TreeTable>
 </mvc:View>

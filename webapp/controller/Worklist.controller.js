@@ -937,6 +937,8 @@ sap.ui.define(
         oDataModel.setProperty("/activeControl", sSrc);
 
         const oTextArea = new sap.m.TextArea({
+          rows: 5,
+          cols: 50,
           value: oEvent.getSource().getModel("data").getProperty(sSrc),
         });
 
