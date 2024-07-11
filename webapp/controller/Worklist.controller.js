@@ -801,7 +801,13 @@ sap.ui.define(
             .setProperty(`${sPath}/ItpProcedureDescr`, "");
           this.getView()
             .getModel("data")
+            .setProperty(`${sPath}/ItpProcedure`, "");
+          this.getView()
+            .getModel("data")
             .setProperty(`${sPath}/AcceptCritDescr`, "");
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCrit`, "");
           this.getView()
             .getModel("data")
             .setProperty(`${sPath}/SpecialMode`, true);
@@ -817,7 +823,13 @@ sap.ui.define(
             );
           this.getView()
             .getModel("data")
+            .setProperty(`${sPath}/ItpProcedure`, oActScope.ItpProcedure);
+          this.getView()
+            .getModel("data")
             .setProperty(`${sPath}/AcceptCritDescr`, oActScope.AcceptCritDescr);
+          this.getView()
+            .getModel("data")
+            .setProperty(`${sPath}/AcceptCrit`, oActScope.AcceptCrit);
           this.getView()
             .getModel("data")
             .setProperty(`${sPath}/SpecialMode`, false);
